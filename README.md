@@ -10,7 +10,7 @@ Make sure to check the to-do below if you want to take up a task yourself.
 Features
 ----
 - Mozilla's "TelemetryWrapper" and all related calls removed.
-- Tracking Protection forced to "strict", however options insist on "Standard" (#1)
+- Tracking Protection forced to "strict", however options insist on "Standard" (https://github.com/haiku-balls/firefox-ios-noTelemetry/issues/1)
 - Studies and SendUsage flags forced disabled.
 - Pocket and sponsored tiles/pocket disabled.
 
