@@ -1,29 +1,23 @@
-Firefox for iOS [![codebeat badge](https://codebeat.co/badges/67e58b6d-bc89-4f22-ba8f-7668a9c15c5a)](https://codebeat.co/projects/github-com-mozilla-firefox-ios) [![codecov](https://codecov.io/gh/mozilla-mobile/firefox-ios/branch/main/graph/badge.svg)](https://codecov.io/gh/mozilla-mobile/firefox-ios/branch/main)
+Firefox iOS without Telemetry!*
 ===============
-
-Download on the [App Store](https://apps.apple.com/app/firefox-web-browser/id989804926).
-
-
-This branch (main)
------------
-
-This branch works with [Xcode 14.1.0](https://developer.apple.com/download/all/?q=xcode), Swift 5.7 and supports iOS 13 and above.
-
-*Please note:* Both Intel and M1 macs are supported 🎉 and we use swift package manager.
-
-Please make sure you aim your pull requests in the right direction.
-
-For bug fixes and features for a specific release, use the version branch.
 
 Getting involved
 ----------------
 
-We encourage you to participate in this open source project. We love Pull Requests, Issue Reports, Feature Requests or any kind of positive contribution. Please read the [Mozilla Community Participation Guidelines](https://www.mozilla.org/en-US/about/governance/policies/participation/) and our [Firefox for iOS contributing guidelines](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md) first.
+If you remove more telemetry that I missed, or want to suggest something to be changed make a PR or issue!
+Make sure to check the to-do below if you want to take up a task yourself.
 
-- Chat: See [#fx-ios](https://chat.mozilla.org/#/room/#fx-ios:mozilla.org) for general discussion, or open a [Github discussion](https://github.com/mozilla-mobile/firefox-ios/discussions).
-- Issues: [File a new issue](https://github.com/mozilla-mobile/firefox-ios/issues/new/choose) • [Existing bugs](https://github.com/mozilla-mobile/firefox-ios/issues)
+Features
+----
+- Mozilla's "TelemetryWrapper" and all related calls removed.
+- Tracking Protection forced to "strict", however options insist on "Standard" (#1)
+- Studies and SendUsage flags forced disabled.
+- Pocket and sponsored tiles/pocket disabled.
 
-Want to contribute on the codebase but don't know where to start? Here is a list of [issues that are contributor friendly](https://github.com/mozilla-mobile/firefox-ios/labels/Contributor%20OK). 
+Todo
+----
+- Remove the pinned Google tile.
+- Remove the "Glean" telemetry service. (Might be too integrated; might not even phone home...?)
 
 Building the code
 -----------------
@@ -51,37 +45,6 @@ Building the code
 
 ⚠️ Important: In case you have dependencies issues with SPM, please try the following:
 - Xcode -> File -> Packages -> Reset Package Caches
-
-Building User Scripts
------------------
-
-User Scripts (JavaScript injected into the `WKWebView`) are compiled, concatenated, and minified using [webpack](https://webpack.js.org/). User Scripts to be aggregated are placed in the following directories:
-
-```none
-/Client
-|-- /Frontend
-    |-- /UserContent
-        |-- /UserScripts
-            |-- /AllFrames
-            |   |-- /AtDocumentEnd
-            |   |-- /AtDocumentStart
-            |-- /MainFrame
-                |-- /AtDocumentEnd
-                |-- /AtDocumentStart
-```
-
-This reduces the total possible number of User Scripts down to four. The compiled output from concatenating and minifying the User Scripts placed in these folders resides in `/Client/Assets` and are named accordingly:
-
-* `AllFramesAtDocumentEnd.js`
-* `AllFramesAtDocumentStart.js`
-* `MainFrameAtDocumentEnd.js`
-* `MainFrameAtDocumentStart.js`
-
-To simplify the build process, these compiled files are checked-in to this repository. When adding or editing User Scripts, these files can be re-compiled with `webpack` manually. This requires Node.js to be installed, and all required `npm` packages can be installed by running `npm install` in the project's root directory. User Scripts can be compiled by running the following `npm` command in the root directory of the project:
-
-```shell
-npm run build
-```
 
 License
 -----------------
