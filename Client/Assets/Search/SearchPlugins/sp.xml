@@ -1,0 +1,21 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>StartPage</ShortName>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16" src="https://www.startpage.com/sp/cdn/favicons/favicon--default.ico" />
+<Url type="application/x-suggestions+json" method="GET" template="https://startpage.com/sp/">
+  <Param name="query" value="{searchTerms}"/>
+  <Param name="type" value="list"/>
+</Url>
+<!-- this is effectively x-moz-phonesearch, but search service expects a text/html entry -->
+<Url type="text/html" method="GET" template="https://startpage.com/sp/">
+  <Param name="query" value="{searchTerms}" />
+</Url>
+<Url type="application/x-moz-tabletsearch" method="GET" template="https://startpage.com/sp/">
+  <Param name="query" value="{searchTerms}" />
+</Url>
+<SearchForm>https://startpage.com</SearchForm>
+</SearchPlugin>
