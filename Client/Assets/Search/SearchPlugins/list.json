@@ -1,8 +1,8 @@
 {
   "default": {
-    "searchDefault": "StartPage",
+    "searchDefault": "DuckDuckGo",
     "visibleDefaultEngines": [
-      "sp"
+      "ddg"
     ]
   },
   "regionOverrides": {
@@ -880,6 +880,17 @@
         "searchDefault": "百度"
       }
     },
-
+    "zh-TW": {
+      "default": {
+        "visibleDefaultEngines": [
+          "google-b-m", "bing", "ddg", "wikipedia-zh-TW"
+        ]
+      },
+      "experimental-hidden": {
+        "visibleDefaultEngines": [
+          "duckduckgo"
+        ]
+      }
+    }
   }
 }
