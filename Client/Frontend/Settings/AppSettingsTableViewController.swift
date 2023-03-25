@@ -113,7 +113,6 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
             HomeSetting(settings: self),
             OpenWithSetting(settings: self),
             ThemeSetting(settings: self),
-            SiriPageSetting(settings: self),
             BoolSetting(
                 prefs: prefs,
                 theme: themeManager.currentTheme,
@@ -132,16 +131,6 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         let inactiveTabsAreBuildActive = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly)
         if tabTrayGroupsAreBuildActive || inactiveTabsAreBuildActive {
             generalSettings.insert(TabsSetting(theme: themeManager.currentTheme), at: 3)
-        }
-
-        let accountChinaSyncSetting: [Setting]
-        if !AppInfo.isChinaEdition {
-            accountChinaSyncSetting = []
-        } else {
-            accountChinaSyncSetting = [
-                // Show China sync service setting:
-                ChinaSyncServiceSetting(settings: self)
-            ]
         }
         // There is nothing to show in the Customize section if we don't include the compact tab layout
         // setting on iPad. When more options are added that work on both device types, this logic can
@@ -167,15 +156,6 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         let accountSectionTitle = NSAttributedString(string: .FxAFirefoxAccount)
 
         let footerText = !profile.hasAccount() ? NSAttributedString(string: .Settings.Sync.ButtonDescription) : nil
-        settings += [
-            SettingSection(title: accountSectionTitle, footerTitle: footerText, children: [
-                // Without a Firefox Account:
-                ConnectSetting(settings: self),
-                AdvancedAccountSetting(settings: self),
-                // With a Firefox Account:
-                AccountStatusSetting(settings: self),
-                SyncNowSetting(settings: self)
-            ] + accountChinaSyncSetting )]
 
         settings += [ SettingSection(title: NSAttributedString(string: .SettingsGeneralSectionTitle), children: generalSettings)]
 
@@ -183,10 +163,6 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
 
         privacySettings.append(ClearPrivateDataSetting(settings: self))
-
-        if autofillCreditCardStatus {
-            privacySettings.append(AutofillCreditCardSettings(settings: self))
-        }
 
         privacySettings += [
             BoolSetting(prefs: prefs,

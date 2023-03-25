@@ -18,10 +18,9 @@ struct ContentBlockingConfig {
 }
 
 enum BlockingStrength: String {
-    case basic
     case strict
 
-    static let allOptions: [BlockingStrength] = [.basic, .strict]
+    static let allOptions: [BlockingStrength] = [.strict]
 }
 
 /**
@@ -56,7 +55,7 @@ class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
     }
 
     var blockingStrengthPref: BlockingStrength {
-        return userPrefs.stringForKey(ContentBlockingConfig.Prefs.StrengthKey).flatMap(BlockingStrength.init) ?? .basic
+        return userPrefs.stringForKey(ContentBlockingConfig.Prefs.StrengthKey).flatMap(BlockingStrength.init) ?? .strict
     }
 
     init(tab: ContentBlockerTab, prefs: Prefs) {
