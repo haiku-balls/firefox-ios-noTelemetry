@@ -37,29 +37,29 @@ extension GridTabViewController {
     }
 
     @objc func didCloseTabKeyCommand() {
-        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "close-tab"])
+
         if let tab = tabManager.selectedTab {
             tabManager.removeTab(tab)
         }
     }
 
     @objc func didCloseAllTabsKeyCommand() {
-        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "close-all-tabs"])
+
         closeTabsTrayBackground()
     }
 
     @objc func didEnterTabKeyCommand() {
-        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "enter-tab"])
+
         dismissVC()
     }
 
     @objc func didOpenNewTabKeyCommand() {
-        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "new-tab"])
+
         openNewTab(isPrivate: tabDisplayManager.isPrivate)
     }
 
     @objc func didChangeSelectedTabKeyCommand(sender: UIKeyCommand) {
-        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "select-tab"])
+
         let step: Int
         guard let input = sender.input else { return }
         switch input {

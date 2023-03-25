@@ -194,12 +194,8 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
                     TabContentBlocker.prefsChanged()
                     self.tableView.reloadData()
 
-                    let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: "ETP-strength",
-                                  TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: option.rawValue]
-                    TelemetryWrapper.recordEvent(category: .action,
-                                                 method: .change,
-                                                 object: .setting,
-                                                 extras: extras)
+                    // let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: "ETP-strength",
+
 
                     if option == .strict {
                         self.button.isHidden = true

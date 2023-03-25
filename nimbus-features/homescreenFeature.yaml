@@ -13,7 +13,7 @@ features:
             "jump-back-in": true,
             "recently-saved": true,
             "recent-explorations": true,
-            "pocket": true
+            "pocket": false
           }
       sponsored-tiles:
         description: >
@@ -22,7 +22,7 @@ features:
         type: SponsoredTiles
         default:
           {
-            "status": true,
+            "status": false,
             "max-number-of-tiles": 2
           }
       pocket-sponsored-stories:
@@ -45,16 +45,16 @@ features:
             "jump-back-in": true,
             "recently-saved": true,
             "recent-explorations": true,
-            "pocket": true
+            "pocket": false
           },
           "sponsored-tiles": {
-            "status": true,
+            "status": false,
             "max-number-of-tiles": 2
           },
           "wallpaper-feature": {
             "status": true
           },
-          "pocket-sponsored-stories": true,
+          "pocket-sponsored-stories": false,
           "jump-back-in-synced-tab": true
         }
       - channel: beta
@@ -64,10 +64,10 @@ features:
             "jump-back-in": true,
             "recently-saved": true,
             "recent-explorations": true,
-            "pocket": true
+            "pocket": false
           },
           "sponsored-tiles": {
-            "status": true,
+            "status": false,
             "max-number-of-tiles": 1
           },
           "wallpaper-feature": {

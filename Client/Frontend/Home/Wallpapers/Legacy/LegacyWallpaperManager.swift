@@ -85,9 +85,6 @@ struct LegacyWallpaperManager {
         return inLandscape ? image.landscape : image.portrait
     }
 
-    public func getWallpaperTelemetryAt(index: Int) -> [String: String] {
-        return dataManager.availableWallpapers[index].telemetryMetadata
-    }
 
     public func getAccessibilityLabelForWallpaper(at index: Int) -> String {
         return dataManager.availableWallpapers[index].accessibilityLabel

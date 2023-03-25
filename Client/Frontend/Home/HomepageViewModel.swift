@@ -187,21 +187,9 @@ class HomepageViewModel: FeatureFlaggable {
         guard !viewAppeared else { return }
 
         viewAppeared = true
-        nimbus.features.homescreenFeature.recordExposure()
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .view,
-                                     object: .firefoxHomepage,
-                                     value: .fxHomepageOrigin,
-                                     extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
 
         // Firefox home page tracking i.e. being shown from awesomebar vs bottom right hamburger menu
-        let trackingValue: TelemetryWrapper.EventValue = isZeroSearch
-        ? .openHomeFromAwesomebar : .openHomeFromPhotonMenuButton
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .open,
-                                     object: .firefoxHomepage,
-                                     value: trackingValue,
-                                     extras: nil)
+        // let trackingValue: TelemetryWrapper.EventValue = isZeroSearch
         childViewModels.forEach { $0.screenWasShown() }
     }
 

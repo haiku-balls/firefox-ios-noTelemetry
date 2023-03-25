@@ -396,7 +396,7 @@ extension GridTabViewController {
 
     func dismissTabTray() {
         self.navigationController?.dismiss(animated: true, completion: nil)
-        TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
+
     }
 }
 
@@ -529,13 +529,13 @@ extension GridTabViewController: TabPeekDelegate {
 extension GridTabViewController: TabDisplayCompletionDelegate, RecentlyClosedPanelDelegate {
     // RecentlyClosedPanelDelegate
     func openRecentlyClosedSiteInSameTab(_ url: URL) {
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .openRecentlyClosedTab, extras: nil)
+
         delegate?.tabTrayOpenRecentlyClosedTab(url)
         dismissTabTray()
     }
 
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .openRecentlyClosedTab, extras: nil)
+
         openNewTab(URLRequest(url: url), isPrivate: isPrivate)
         dismissTabTray()
     }

@@ -181,7 +181,7 @@ private extension TabScrollingController {
     @objc func reload() {
         guard let tab = tab else { return }
         tab.reloadPage()
-        TelemetryWrapper.recordEvent(category: .action, method: .pull, object: .reload)
+
     }
 
     func roundNum(_ num: CGFloat) -> CGFloat {

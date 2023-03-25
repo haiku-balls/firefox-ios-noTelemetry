@@ -158,28 +158,27 @@ class LibraryViewController: UIViewController, Themeable {
     }
 
     @objc func panelChanged() {
-        var eventValue: TelemetryWrapper.EventValue
+        // var eventValue: TelemetryWrapper.EventValue
         var selectedPanel: LibraryPanelType
 
         switch librarySegmentControl.selectedSegmentIndex {
         case 0:
             selectedPanel = .bookmarks
-            eventValue = .bookmarksPanel
+            // eventValue = .bookmarksPanel
         case 1:
             selectedPanel = .history
-            eventValue = .historyPanel
+            // eventValue = .historyPanel
         case 2:
             selectedPanel = .downloads
-            eventValue = .downloadsPanel
+            // eventValue = .downloadsPanel
         case 3:
             selectedPanel = .readingList
-            eventValue = .readingListPanel
+            // ventValue = .readingListPanel
         default:
             return
         }
 
         setupOpenPanel(panelType: selectedPanel)
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .libraryPanel, value: eventValue)
     }
 
     func setupOpenPanel(panelType: LibraryPanelType) {

@@ -81,12 +81,9 @@ class FxAWebViewController: UIViewController {
         webView.navigationDelegate = self
         view = webView
         webView.addObserver(self, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)
-        viewModel.setupFirstPage { [weak self] (request, telemetryEventMethod) in
-            if let method = telemetryEventMethod {
-                TelemetryWrapper.recordEvent(category: .firefoxAccount, method: method, object: .accountConnected)
-            }
+        viewModel.setupFirstPage { [weak self] (request) in
 
-            self?.loadRequest(request, isPairing: telemetryEventMethod == .qrPairing)
+            self?.loadRequest(request)
         }
 
         viewModel.onDismissController = { [weak self] in
@@ -121,12 +118,8 @@ class FxAWebViewController: UIViewController {
     private let backgroundTaskName = "moz.org.sync.qrcode.auth"
     private var backgroundTaskID = UIBackgroundTaskIdentifier(rawValue: 0)
 
-    private func loadRequest(_ request: URLRequest, isPairing: Bool) {
+    private func loadRequest(_ request: URLRequest) {
         // Only start background task on pairing request
-        guard isPairing else {
-            webView.load(request)
-            return
-        }
 
         backgroundTaskID = UIApplication.shared.beginBackgroundTask(withName: backgroundTaskName) { [weak self] in
             self?.webView.stopLoading()
@@ -237,7 +230,7 @@ extension FxAWebViewController {
         switch path {
         case .URL:
             if let flow = viewModel.fxAWebViewTelemetry.getFlowFromUrl(fxaUrl: webView.url) {
-                viewModel.fxAWebViewTelemetry.recordTelemetry(for: FxAFlow.startedFlow(type: flow))
+                // viewModel.fxAWebViewTelemetry.recordTelemetry(for: FxAFlow.startedFlow(type: flow))
             }
         default:
             sendObserveValueError(forKeyPath: keyPath)

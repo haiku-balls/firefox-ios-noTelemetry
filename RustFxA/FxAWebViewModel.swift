@@ -82,7 +82,7 @@ class FxAWebViewModel {
         return (hasOnlySecureContent ? "🔒 " : "") + (url?.host ?? "")
     }
 
-    func setupFirstPage(completion: @escaping (URLRequest, TelemetryWrapper.EventMethod?) -> Void) {
+    func setupFirstPage(completion: @escaping (URLRequest) -> Void) {
         profile.rustFxA.accountManager.uponQueue(.main) { accountManager in
             let entrypoint = self.deepLinkParams.entrypoint.rawValue
             accountManager.getManageAccountURL(entrypoint: "ios_settings_\(entrypoint)") { [weak self] result in
@@ -96,7 +96,7 @@ class FxAWebViewModel {
 
                         if case .success(let url) = result {
                             self.baseURL = url
-                            completion(self.makeRequest(url), .emailLogin)
+                            completion(self.makeRequest(url))
                         }
                     }
                 case let .qrCode(url):
@@ -105,13 +105,13 @@ class FxAWebViewModel {
 
                         if case .success(let url) = result {
                             self.baseURL = url
-                            completion(self.makeRequest(url), .qrPairing)
+                            completion(self.makeRequest(url))
                         }
                     }
                 case .settingsPage:
                     if case .success(let url) = result {
                         self.baseURL = url
-                        completion(self.makeRequest(url), nil)
+                        completion(self.makeRequest(url))
                     }
                 }
             }
@@ -275,7 +275,6 @@ extension FxAWebViewModel {
             }
         }
         // Record login or registration completed telemetry
-        fxAWebViewTelemetry.recordTelemetry(for: .completed)
         onDismissController?()
     }
 

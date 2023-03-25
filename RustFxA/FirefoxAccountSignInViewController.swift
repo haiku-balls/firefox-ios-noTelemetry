@@ -34,10 +34,6 @@ class FirefoxAccountSignInViewController: UIViewController {
     private let deepLinkParams: FxALaunchParams
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
-    /// This variable is used to track parent page that launched this sign in VC.
-    /// telemetryObject deduced from parentType initializer is sent with telemetry events on button click
-    private let telemetryObject: TelemetryWrapper.EventObject
-
     /// Dismissal style for FxAWebViewController
     /// Changes based on whether or not this VC is launched from the app menu or settings
     private let fxaDismissStyle: DismissType
@@ -145,19 +141,19 @@ class FirefoxAccountSignInViewController: UIViewController {
         self.profile = profile
         switch parentType {
         case .appMenu:
-            self.telemetryObject = .appMenu
+            // self.telemetryObject = .appMenu
             self.fxaDismissStyle = .dismiss
         case .onboarding:
-            self.telemetryObject = .onboarding
+            // self.telemetryObject = .onboarding
             self.fxaDismissStyle = .dismiss
         case .upgrade:
-            self.telemetryObject = .upgradeOnboarding
+            // self.telemetryObject = .upgradeOnboarding
             self.fxaDismissStyle = .dismiss
         case .settings:
-            self.telemetryObject = .settings
+            // self.telemetryObject = .settings
             self.fxaDismissStyle = .popToRootVC
         case .tabTray:
-            self.telemetryObject = .tabTray
+            // self.telemetryObject = .tabTray
             self.fxaDismissStyle = .popToTabTray
         }
         self.logger = logger
@@ -257,25 +253,21 @@ class FirefoxAccountSignInViewController: UIViewController {
     @objc func scanbuttonTapped(_ sender: UIButton) {
         let qrCodeVC = QRCodeViewController()
         qrCodeVC.qrCodeDelegate = self
-        TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .tap, object: telemetryObject, extras: ["flow_type": "pairing"])
         presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: qrCodeVC, topTabsVisible: true)
     }
 
     /// Use email login button tapped
     @objc func emailLoginTapped(_ sender: UIButton) {
-        let askForPermission = OnboardingNotificationCardHelper().askForPermissionDuringSync(
-            isOnboarding: telemetryObject == .onboarding)
+        let askForPermission = OnboardingNotificationCardHelper()
 
         let fxaWebVC = FxAWebViewController(pageType: .emailLoginFlow,
                                             profile: profile,
                                             dismissalStyle: fxaDismissStyle,
-                                            deepLinkParams: deepLinkParams,
-                                            shouldAskForNotificationPermission: askForPermission)
+                                            deepLinkParams: deepLinkParams)
         fxaWebVC.shouldDismissFxASignInViewController = { [weak self] in
             self?.shouldReload?()
             self?.dismissVC()
         }
-        TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .qrPairing, object: telemetryObject, extras: ["flow_type": "email"])
         navigationController?.pushViewController(fxaWebVC, animated: true)
     }
 }
@@ -283,14 +275,12 @@ class FirefoxAccountSignInViewController: UIViewController {
 // MARK: QRCodeViewControllerDelegate Functions
 extension FirefoxAccountSignInViewController: QRCodeViewControllerDelegate {
     func didScanQRCodeWithURL(_ url: URL) {
-        let askForPermission = OnboardingNotificationCardHelper().askForPermissionDuringSync(
-            isOnboarding: telemetryObject == .onboarding)
+        let askForPermission = OnboardingNotificationCardHelper()
 
         let vc = FxAWebViewController(pageType: .qrCode(url: url.absoluteString),
                                       profile: profile,
                                       dismissalStyle: fxaDismissStyle,
-                                      deepLinkParams: deepLinkParams,
-                                      shouldAskForNotificationPermission: askForPermission)
+                                      deepLinkParams: deepLinkParams)
         navigationController?.pushViewController(vc, animated: true)
     }
 
@@ -317,25 +307,23 @@ extension FirefoxAccountSignInViewController {
     ) -> UIViewController {
         // Show the settings page if we have already signed in. If we haven't then show the signin page
         let parentType: FxASignInParentType
-        let object: TelemetryWrapper.EventObject
         guard profile.hasSyncableAccount() else {
             switch referringPage {
             case .appMenu, .none:
                 parentType = .appMenu
-                object = .appMenu
+                // object = .appMenu
             case .onboarding:
                 parentType = .onboarding
-                object = .onboarding
+                // object = .onboarding
             case .settings:
                 parentType = .settings
-                object = .settings
+                // object = .settings
             case .tabTray:
                 parentType = .tabTray
-                object = .tabTray
+                // object = .tabTray
             }
 
             let signInVC = FirefoxAccountSignInViewController(profile: profile, parentType: parentType, deepLinkParams: deepLinkParams)
-            TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: object)
             return signInVC
         }
 

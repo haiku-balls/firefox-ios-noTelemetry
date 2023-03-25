@@ -124,7 +124,7 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     @objc private func presentSignIn() {
         if let delegate = self.delegate {
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .syncSignIn)
+ 
             delegate.remotePanelDidRequestToSignIn()
         }
     }

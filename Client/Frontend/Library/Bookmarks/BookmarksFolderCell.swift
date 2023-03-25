@@ -64,7 +64,7 @@ extension BookmarkItemData: BookmarksFolderCell {
                    libraryPanelDelegate: LibraryPanelDelegate?,
                    navigationController: UINavigationController?) {
         libraryPanelDelegate?.libraryPanel(didSelectURLString: url, visitType: .bookmark)
-        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .bookmark, value: .bookmarksPanel)
+
     }
 }
 

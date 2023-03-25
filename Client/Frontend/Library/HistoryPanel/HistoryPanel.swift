@@ -594,11 +594,7 @@ extension HistoryPanel: UITableViewDelegate {
 
         libraryPanelDelegate?.libraryPanel(didSelectURL: url, visitType: .typed)
 
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .selectedHistoryItem,
-                                     value: .historyPanelNonGroupItem,
-                                     extras: nil)
+
     }
 
     private func handleHistoryActionableTapped(historyActionable: HistoryActionablesModel) {
@@ -622,7 +618,7 @@ extension HistoryPanel: UITableViewDelegate {
         asGroupListVC.libraryPanelDelegate = libraryPanelDelegate
         asGroupListVC.title = asGroupItem.displayTitle
 
-        TelemetryWrapper.recordEvent(category: .action, method: .navigate, object: .navigateToGroupHistory, value: nil, extras: nil)
+
 
         navigationController?.pushViewController(asGroupListVC, animated: true)
     }
@@ -723,7 +719,7 @@ extension HistoryPanel {
     }
 
     func bottomSearchButtonAction() {
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .searchHistory)
+
         startSearchState()
     }
 
@@ -731,7 +727,7 @@ extension HistoryPanel {
         // Leave search mode when clearing history
         updatePanelState(newState: .history(state: .mainView))
 
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .deleteHistory)
+
         // TODO: Yoana remove notification and handle directly
         NotificationCenter.default.post(name: .OpenClearRecentHistory, object: nil)
     }

@@ -211,7 +211,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
             orderedRegularTabs.forEach {
                 self.dataStore.insert($0)
             }
-            self.recordGroupedTabTelemetry()
+
             self.collectionView.reloadData()
         }
     }
@@ -321,7 +321,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
 
         UserDefaults.standard.set(isPrivate, forKey: "wasLastSessionPrivate")
 
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .privateBrowsingButton, extras: ["is-private": isOn.description] )
+
 
         if createTabOnEmptyPrivateMode {
             // if private tabs is empty and we are transitioning to it add a tab
@@ -476,32 +476,6 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         })
     }
 
-    private func recordEventAndBreadcrumb(object: TelemetryWrapper.EventObject, method: TelemetryWrapper.EventMethod) {
-        let isTabTray = tabDisplayer as? GridTabViewController != nil
-        let eventValue = isTabTray ? TelemetryWrapper.EventValue.tabTray : TelemetryWrapper.EventValue.topTabs
-        TelemetryWrapper.recordEvent(category: .action, method: method, object: object, value: eventValue)
-    }
-
-    func recordGroupedTabTelemetry() {
-        if shouldEnableGroupedTabs,
-           !isPrivate,
-           let tabGroups = tabGroups,
-           !tabGroups.isEmpty {
-            let groupWithTwoTabs = tabGroups.filter { $0.groupedItems.count == 2 }.count
-            let groupsWithTwoMoreTab = tabGroups.filter { $0.groupedItems.count > 2 }.count
-            let tabsInAllGroup = tabsInAllGroups?.count ?? 0
-            let averageTabsInAllGroups = ceil(Double(tabsInAllGroup / tabGroups.count))
-            let groupTabExtras: [String: Int32] = [
-                "\(TelemetryWrapper.EventExtraKey.groupsWithTwoTabsOnly)": Int32(groupWithTwoTabs),
-                "\(TelemetryWrapper.EventExtraKey.groupsWithTwoMoreTab)": Int32(groupsWithTwoMoreTab),
-                "\(TelemetryWrapper.EventExtraKey.totalNumberOfGroups)": Int32(tabGroups.count),
-                "\(TelemetryWrapper.EventExtraKey.averageTabsInAllGroups)": Int32(averageTabsInAllGroups),
-                "\(TelemetryWrapper.EventExtraKey.totalTabsInAllGroups)": Int32(tabsInAllGroup),
-            ]
-            TelemetryWrapper.recordEvent(category: .action, method: .view, object: .tabTray, value: .tabGroupWithExtras, extras: groupTabExtras)
-        }
-    }
-
     deinit {
         notificationCenter.removeObserver(self)
     }
@@ -567,7 +541,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
                 cell = inactiveCell
                 if !hasSentInactiveTabShownEvent {
                     hasSentInactiveTabShownEvent = true
-                    TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .inactiveTabShown, extras: nil)
+
                 }
             }
 
@@ -606,7 +580,7 @@ extension TabDisplayManager: GroupedTabDelegate {
         let object = OpenTabNotificationObject(type: .openSearchNewTab(searchTerm))
         NotificationCenter.default.post(name: .OpenTabNotification, object: object)
 
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .groupedTabPerformSearch)
+
     }
 
     func closeGroupTab(tab: Tab) {
@@ -652,7 +626,7 @@ extension TabDisplayManager: InactiveTabsDelegate {
 
     func shouldCloseInactiveTab(tab: Tab) {
         removeInactiveTabAndReloadView(tabs: [tab])
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .inactiveTabSwipeClose, extras: nil)
+
     }
 
     func didTapCloseAllTabs() {
@@ -663,12 +637,12 @@ extension TabDisplayManager: InactiveTabsDelegate {
         // Close all inactive tabs
         if let inactiveTabs = inactiveViewModel?.inactiveTabs, !inactiveTabs.isEmpty {
             removeInactiveTabAndReloadView(tabs: inactiveTabs)
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .inactiveTabCloseAllButton, extras: nil)
+
         }
     }
 
     func didSelectInactiveTab(tab: Tab?) {
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .openInactiveTab, extras: nil)
+
         if let tabTray = tabDisplayer as? GridTabViewController {
             tabManager.selectTab(tab)
             tabTray.dismissTabTray()
@@ -676,8 +650,6 @@ extension TabDisplayManager: InactiveTabsDelegate {
     }
 
     func toggleInactiveTabSection(hasExpanded: Bool) {
-        let hasExpandedEvent: TelemetryWrapper.EventValue = hasExpanded ? .inactiveTabExpand : .inactiveTabCollapse
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: hasExpandedEvent, extras: nil)
 
         isInactiveViewExpanded = hasExpanded
         let indexPath = IndexPath(row: 0, section: TabDisplaySection.inactiveTabs.rawValue)
@@ -702,7 +674,7 @@ extension TabDisplayManager: TabSelectionDelegate {
             if tabsToDisplay.contains(tab) {
                 self.tabManager.selectTab(tab)
             }
-            TelemetryWrapper.recordEvent(category: .action, method: .press, object: .tab)
+
         }
     }
 }
@@ -725,7 +697,7 @@ extension TabDisplayManager: UIDropInteractionDelegate {
     }
 
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
-        recordEventAndBreadcrumb(object: .url, method: .drop)
+
 
         _ = session.loadObjects(ofClass: URL.self) { urls in
             guard let url = urls.first else { return }
@@ -762,7 +734,7 @@ extension TabDisplayManager: UICollectionViewDragDelegate {
         // Don't store the URL in the item as dragging a tab near the screen edge will prompt to open Safari with the URL
         let itemProvider = NSItemProvider()
 
-        recordEventAndBreadcrumb(object: .tab, method: .drag)
+
 
         let dragItem = UIDragItem(itemProvider: itemProvider)
         dragItem.localObject = tab
@@ -804,7 +776,7 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
             filteredTabs = tabManager.normalTabs.filter { filteredTabs.contains($0) }
         }
 
-        recordEventAndBreadcrumb(object: .tab, method: .drop)
+
 
         coordinator.drop(dragItem, toItemAt: destinationIndexPath)
 

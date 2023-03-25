@@ -262,7 +262,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
             TabEvent.post(.didGainFocus, for: tab)
             tab.applyTheme()
         }
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .tab)
+
 
         // Note: we setup last session private case as the session is tied to user's selected
         // tab but there are times when tab manager isn't available and we need to know
@@ -603,13 +603,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
             self.updateIndexAfterRemovalOf(tab, deletedIndex: index, viableTabsIndex: viableTabsIndex)
             completion?()
         }
-
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .close,
-            object: .tab,
-            value: tab.isPrivate ? .privateTab : .normalTab
-        )
     }
 
     /// Remove a tab, will notify delegate of the tab removal

@@ -80,19 +80,6 @@ struct LegacyWallpaper: Codable, Equatable {
     private let expiryDate: Date?
     private let locales: [String]?
 
-    var telemetryMetadata: [String: String] {
-        var metadata = [String: String]()
-
-        metadata[TelemetryWrapper.EventExtraKey.wallpaperName.rawValue] = name
-
-        if type == .defaultBackground {
-            metadata[TelemetryWrapper.EventExtraKey.wallpaperType.rawValue] = "default"
-        } else if case .themed(let collection) = type {
-            metadata[TelemetryWrapper.EventExtraKey.wallpaperType.rawValue] = collection.rawValue
-        }
-
-        return metadata
-    }
 
     var meetsDateAndLocaleCriteria: Bool {
         if type == .defaultBackground { return true }

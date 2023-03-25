@@ -111,22 +111,6 @@ class WallpaperSelectorViewModel {
         }
     }
 
-    func sendImpressionTelemetry() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .view,
-                                     object: .onboardingWallpaperSelector,
-                                     value: nil,
-                                     extras: nil)
-    }
-
-    func sendDismissImpressionTelemetry() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .close,
-                                     object: .onboardingWallpaperSelector,
-                                     value: nil,
-                                     extras: nil)
-    }
-
     func removeAssetsOnDismiss() {
         wallpaperManager.removeUnusedAssets()
     }
@@ -194,38 +178,7 @@ private extension WallpaperSelectorViewModel {
     func updateCurrentWallpaper(for wallpaperItem: WallpaperSelectorItem,
                                 completion: @escaping (Result<Void, Error>) -> Void) {
         wallpaperManager.setCurrentWallpaper(to: wallpaperItem.wallpaper) { [weak self] result in
-            guard let extra = self?.telemetryMetadata(for: wallpaperItem) else {
-                completion(result)
-                return
-            }
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .tap,
-                                         object: .onboardingWallpaperSelector,
-                                         value: .wallpaperSelected,
-                                         extras: extra)
-
            completion(result)
         }
-    }
-
-    func telemetryMetadata(for item: WallpaperSelectorItem) -> [String: String] {
-        var metadata = [String: String]()
-
-        metadata[TelemetryWrapper.EventExtraKey.wallpaperName.rawValue] = item.wallpaper.id
-
-        let wallpaperTypeKey = TelemetryWrapper.EventExtraKey.wallpaperType.rawValue
-        switch item.wallpaper.type {
-        case .defaultWallpaper:
-            metadata[wallpaperTypeKey] = "default"
-        case .other:
-            switch item.collection.type {
-            case .classic:
-                metadata[wallpaperTypeKey] = item.collection.type.rawValue
-            case .limitedEdition:
-                metadata[wallpaperTypeKey] = item.collection.id
-            }
-        }
-
-        return metadata
     }
 }

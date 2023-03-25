@@ -65,30 +65,7 @@ class PocketViewModel {
         }
     }
 
-    // MARK: - Telemetry
-
-    private func recordSectionHasShown() {
-        if !hasSentPocketSectionEvent {
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .view,
-                                         object: .pocketSectionImpression,
-                                         value: nil,
-                                         extras: nil)
-            hasSentPocketSectionEvent = true
-        }
-    }
-
-    private func recordTapOnStory(index: Int) {
-        // Pocket site extra
-        let key = TelemetryWrapper.EventExtraKey.pocketTilePosition.rawValue
-        let siteExtra = [key: "\(index)"]
-
-        // Origin extra
-        let originExtra = TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
-        let extras = originExtra.merge(with: siteExtra)
-
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .pocketStory, value: nil, extras: extras)
-    }
+    // MARK: - (No more) Telemetry
 
     // MARK: - Private
 
@@ -103,7 +80,7 @@ class PocketViewModel {
 
     private func bind(pocketStoryViewModel: PocketStandardCellViewModel) {
         pocketStoryViewModel.onTap = { [weak self] indexPath in
-            self?.recordTapOnStory(index: indexPath.row)
+
             let siteUrl = self?.pocketStoriesViewModels[indexPath.row].url
             siteUrl.map { self?.onTapTileAction?($0) }
         }
@@ -205,7 +182,7 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 extension PocketViewModel: HomepageSectionHandler {
     func configure(_ collectionView: UICollectionView,
                    at indexPath: IndexPath) -> UICollectionViewCell {
-        recordSectionHasShown()
+
 
         if isStoryCell(index: indexPath.row) {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PocketStandardCell.cellIdentifier,

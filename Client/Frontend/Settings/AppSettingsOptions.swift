@@ -11,7 +11,7 @@ import Glean
 
 // This file contains all of the settings available in the main settings screen of the app.
 
-private var ShowDebugSettings: Bool = false
+private var ShowDebugSettings: Bool = true
 private var DebugSettingsClickCount: Int = 0
 
 struct SettingDisclosureUtility {
@@ -38,7 +38,7 @@ class ConnectSetting: WithoutAccountSetting {
     override func onClick(_ navigationController: UINavigationController?) {
         let fxaParams = FxALaunchParams(entrypoint: .connectSetting, query: [:])
         let viewController = FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: fxaParams)
-        TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
+
         navigationController?.pushViewController(viewController, animated: true)
     }
 
@@ -353,7 +353,7 @@ class AccountStatusSetting: WithAccountSetting {
         guard !profile.rustFxA.accountNeedsReauth() else {
             let fxaParams = FxALaunchParams(entrypoint: .accountStatusSettingReauth, query: [:])
             let controller = FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: fxaParams)
-            TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
+
             navigationController?.pushViewController(controller, animated: true)
             return
         }
@@ -491,20 +491,6 @@ class ForceCrashSetting: HiddenSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         fatalError("Force crash")
-    }
-}
-
-class ChangeToChinaSetting: HiddenSetting {
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: "Debug: toggle China version (needs restart)", attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        if UserDefaults.standard.bool(forKey: AppInfo.debugPrefIsChinaEdition) {
-            UserDefaults.standard.removeObject(forKey: AppInfo.debugPrefIsChinaEdition)
-        } else {
-            UserDefaults.standard.set(true, forKey: AppInfo.debugPrefIsChinaEdition)
-        }
     }
 }
 
@@ -776,74 +762,6 @@ class SendFeedbackSetting: Setting {
     }
 }
 
-class SendAnonymousUsageDataSetting: BoolSetting {
-    init(prefs: Prefs, delegate: SettingsDelegate?, theme: Theme) {
-        let statusText = NSMutableAttributedString()
-        statusText.append(NSAttributedString(string: .SendUsageSettingMessage, attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textSecondary]))
-        statusText.append(NSAttributedString(string: " "))
-        statusText.append(NSAttributedString(string: .SendUsageSettingLink, attributes: [NSAttributedString.Key.foregroundColor: theme.colors.actionPrimary]))
-
-        super.init(
-            prefs: prefs,
-            prefKey: AppConstants.prefSendUsageData,
-            defaultValue: true,
-            attributedTitleText: NSAttributedString(string: .SendUsageSettingTitle),
-            attributedStatusText: statusText,
-            settingDidChange: {
-                AdjustHelper.setEnabled($0)
-                Glean.shared.setUploadEnabled($0)
-                Experiments.setTelemetrySetting($0)
-            }
-        )
-        // We make sure to set this on initialization, in case the setting is turned off
-        // in which case, we would to make sure that users are opted out of experiments
-        Experiments.setTelemetrySetting(prefs.boolForKey(AppConstants.prefSendUsageData) ?? true)
-    }
-
-    override var accessibilityIdentifier: String? { return "SendAnonymousUsageData" }
-
-    override var url: URL? {
-        return SupportUtils.URLForTopic("adjust")
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        setUpAndPushSettingsContentViewController(navigationController, self.url)
-    }
-}
-
-class StudiesToggleSetting: BoolSetting {
-    init(prefs: Prefs, delegate: SettingsDelegate?, theme: Theme) {
-        let statusText = NSMutableAttributedString()
-        statusText.append(NSAttributedString(string: .SettingsStudiesToggleMessage, attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textSecondary]))
-        statusText.append(NSAttributedString(string: " "))
-        statusText.append(NSAttributedString(string: .SettingsStudiesToggleLink, attributes: [NSAttributedString.Key.foregroundColor: theme.colors.actionPrimary]))
-
-        super.init(
-            prefs: prefs,
-            prefKey: AppConstants.prefStudiesToggle,
-            defaultValue: true,
-            attributedTitleText: NSAttributedString(string: .SettingsStudiesToggleTitle),
-            attributedStatusText: statusText,
-            settingDidChange: {
-                Experiments.setStudiesSetting($0)
-            }
-        )
-        // We make sure to set this on initialization, in case the setting is turned off
-        // in which case, we would to make sure that users are opted out of experiments
-        Experiments.setStudiesSetting(prefs.boolForKey(AppConstants.prefStudiesToggle) ?? true)
-    }
-
-    override var accessibilityIdentifier: String? { return "StudiesToggle" }
-
-    override var url: URL? {
-        return SupportUtils.URLForTopic("ios-studies")
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        setUpAndPushSettingsContentViewController(navigationController, self.url)
-    }
-}
-
 // Opens the SUMO page in a new tab
 class OpenSupportPageSetting: Setting {
     init(delegate: SettingsDelegate?, theme: Theme) {
@@ -1044,7 +962,7 @@ class AutofillCreditCardSettings: Setting, FeatureFlaggable {
 
     override func onClick(_ navigationController: UINavigationController?) {
         // Telemetry
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardAutofillSettings)
+
 
         let viewController = CreditCardSettingsViewController(theme: theme)
         navigationController?.pushViewController(viewController, animated: true)
@@ -1100,7 +1018,7 @@ class ChinaSyncServiceSetting: Setting {
     }
 
     @objc func switchValueChanged(_ toggle: UISwitch) {
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .chinaServerSwitch)
+
         guard profile.rustFxA.hasAccount() else {
             prefs.setObject(toggle.isOn, forKey: prefKey)
             RustFirefoxAccounts.reconfig(prefs: profile.prefs)
@@ -1267,7 +1185,7 @@ class DefaultBrowserSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .settingsMenuSetAsDefaultBrowser)
+
         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
     }
 }

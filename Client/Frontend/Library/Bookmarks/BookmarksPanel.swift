@@ -419,7 +419,7 @@ class BookmarksPanel: SiteTableViewController,
     }
 
     private func showBookmarkDetailController(for node: FxBookmarkNode, folder: FxBookmarkNode) {
-        TelemetryWrapper.recordEvent(category: .action, method: .change, object: .bookmark, value: .bookmarksPanel)
+
         let detailController = BookmarkDetailPanel(profile: profile,
                                                    bookmarkNode: node,
                                                    parentBookmarkFolder: folder)
@@ -451,11 +451,7 @@ class BookmarksPanel: SiteTableViewController,
             guard let strongSelf = self else { completion(false); return }
 
             strongSelf.deleteBookmarkNodeAtIndexPath(indexPath)
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .delete,
-                                         object: .bookmark,
-                                         value: .bookmarksPanel,
-                                         extras: ["gesture": "swipe"])
+
             completion(true)
         }
 
@@ -519,11 +515,7 @@ extension BookmarksPanel: LibraryPanelContextMenu {
                                                  iconString: ImageIdentifiers.actionRemoveBookmark,
                                                  tapHandler: { _ in
             self.deleteBookmarkNodeAtIndexPath(indexPath)
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .delete,
-                                         object: .bookmark,
-                                         value: .bookmarksPanel,
-                                         extras: ["gesture": "long-press"])
+
         }).items
         actions.append(removeAction)
 

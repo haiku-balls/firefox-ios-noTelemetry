@@ -50,26 +50,5 @@ final class TopSite {
         }
     }
 
-    // MARK: Telemetry
-
-    func impressionTracking(position: Int) {
-        // Only sending sponsored tile impressions for now
-        guard let tile = site as? SponsoredTile else { return }
-
-        SponsoredTileTelemetry.sendImpressionTelemetry(tile: tile, position: position)
-    }
-
-    func getTelemetrySiteType() -> String {
-        if isPinned && isGoogleGUID {
-            return "google"
-        } else if isPinned {
-            return "user-added"
-        } else if isSuggested {
-            return "suggested"
-        } else if isSponsoredTile {
-            return "sponsored"
-        }
-
-        return "history-based"
-    }
+    // MARK: (No more) Telemetry
 }

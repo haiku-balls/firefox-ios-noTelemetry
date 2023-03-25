@@ -14,6 +14,14 @@ protocol OnboardingCardProtocol {
 }
 
 struct OnboardingCardViewModel: OnboardingCardProtocol {
+    func sendCardViewTelemetry() {
+        
+    }
+    
+    func sendTelemetryButton(isPrimaryAction: Bool) {
+        
+    }
+    
     var cardType: IntroViewModel.InformationCards
     var infoModel: OnboardingModelProtocol
     var shouldShowDescriptionBold: Bool
@@ -26,37 +34,4 @@ struct OnboardingCardViewModel: OnboardingCardProtocol {
         self.shouldShowDescriptionBold = cardType == .welcome && !isFeatureEnabled
     }
 
-    func sendCardViewTelemetry() {
-        let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: cardType.telemetryValue]
-        let eventObject: TelemetryWrapper.EventObject = cardType.isOnboardingScreen ?
-            . onboardingCardView : .upgradeOnboardingCardView
-
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .view,
-                                     object: eventObject,
-                                     value: nil,
-                                     extras: extra)
-    }
-
-    func sendTelemetryButton(isPrimaryAction: Bool) {
-        let eventObject: TelemetryWrapper.EventObject
-        let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: cardType.telemetryValue]
-
-        switch (isPrimaryAction, cardType.isOnboardingScreen) {
-        case (true, true):
-            eventObject = TelemetryWrapper.EventObject.onboardingPrimaryButton
-        case (false, true):
-            eventObject = TelemetryWrapper.EventObject.onboardingSecondaryButton
-        case (true, false):
-            eventObject = TelemetryWrapper.EventObject.upgradeOnboardingPrimaryButton
-        case (false, false):
-            eventObject = TelemetryWrapper.EventObject.upgradeOnboardingSecondaryButton
-        }
-
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: eventObject,
-                                     value: nil,
-                                     extras: extra)
-    }
 }

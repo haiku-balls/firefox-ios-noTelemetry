@@ -71,7 +71,6 @@ class HistoryHighlightsViewModel {
     private var hasSentSectionEvent = false
     private var historyHighlightsDataAdaptor: HistoryHighlightsDataAdaptor
     private let dispatchQueue: DispatchQueueInterface
-    private let telemetry: TelemetryWrapperProtocol
 
     var onTapItem: ((HighlightItem) -> Void)?
     var historyHighlightLongPressHandler: ((HighlightItem, UIView?) -> Void)?
@@ -113,14 +112,12 @@ class HistoryHighlightsViewModel {
          theme: Theme,
          historyHighlightsDataAdaptor: HistoryHighlightsDataAdaptor,
          dispatchQueue: DispatchQueueInterface = DispatchQueue.main,
-         telemetry: TelemetryWrapperProtocol = TelemetryWrapper.shared,
          wallpaperManager: WallpaperManager) {
         self.profile = profile
         self.isPrivate = isPrivate
         self.urlBar = urlBar
         self.theme = theme
         self.dispatchQueue = dispatchQueue
-        self.telemetry = telemetry
         self.wallpaperManager = wallpaperManager
         self.historyHighlightsDataAdaptor = historyHighlightsDataAdaptor
         self.historyHighlightsDataAdaptor.delegate = self
@@ -130,11 +127,7 @@ class HistoryHighlightsViewModel {
 
     func recordSectionHasShown() {
         if !hasSentSectionEvent {
-            telemetry.recordEvent(category: .action,
-                                  method: .view,
-                                  object: .historyImpressions,
-                                  value: nil,
-                                  extras: nil)
+
             hasSentSectionEvent = true
         }
     }
@@ -143,10 +136,7 @@ class HistoryHighlightsViewModel {
         if urlBar.inOverlayMode { urlBar.leaveOverlayMode() }
 
         onTapItem?(highlight)
-        telemetry.recordEvent(category: .action,
-                              method: .tap,
-                              object: .firefoxHomepage,
-                              value: .historyHighlightsItemOpened)
+
     }
 
     func getItemDetailsAt(index: Int) -> HighlightItem? {

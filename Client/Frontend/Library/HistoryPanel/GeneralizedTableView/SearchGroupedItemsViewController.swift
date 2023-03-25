@@ -186,11 +186,7 @@ extension SearchGroupedItemsViewController: UITableViewDelegate {
 
         libraryPanelDelegate?.libraryPanel(didSelectURL: url, visitType: .typed)
 
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .selectedHistoryItem,
-                                     value: .historyPanelGroupedItem,
-                                     extras: nil)
+
 
         if viewModel.presenter == .recentlyVisited {
             dismiss(animated: true, completion: nil)

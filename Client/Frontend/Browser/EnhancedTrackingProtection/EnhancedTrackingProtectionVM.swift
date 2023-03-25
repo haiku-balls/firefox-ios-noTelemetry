@@ -67,7 +67,7 @@ class EnhancedTrackingProtectionMenuVM {
     func toggleSiteSafelistStatus() {
         guard let currentURL = tab.url else { return }
 
-        TelemetryWrapper.recordEvent(category: .action, method: .add, object: .trackingProtectionSafelist)
+
         ContentBlocker.shared.safelist(enable: tab.contentBlocker?.status != .safelisted, url: currentURL) {
             self.tab.reload()
         }

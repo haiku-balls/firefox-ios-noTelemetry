@@ -162,7 +162,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        viewModel.sendTelemetryEvent(for: .tapToDismiss)
+
         isPresenting = false
         onViewDismissed?()
         onViewDismissed = nil
@@ -231,12 +231,12 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
 
     // MARK: - Button Actions
     @objc private func dismissAnimated() {
-        viewModel.sendTelemetryEvent(for: .closeButton)
+
         self.dismiss(animated: true, completion: nil)
     }
 
     @objc private func performAction() {
-        self.viewModel.sendTelemetryEvent(for: .performAction)
+
         self.dismiss(animated: true) {
             self.onActionTapped?()
             self.onActionTapped = nil

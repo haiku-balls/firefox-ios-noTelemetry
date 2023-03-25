@@ -148,13 +148,13 @@ open class TabToolbarHelper: NSObject {
 
     func didClickBack() {
         toolbar.tabToolbarDelegate?.tabToolbarDidPressBack(toolbar, button: toolbar.backButton)
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .navigateTabHistoryBack)
+
     }
 
     func didLongPressBack(_ recognizer: UILongPressGestureRecognizer) {
         if recognizer.state == .began {
             toolbar.tabToolbarDelegate?.tabToolbarDidLongPressBack(toolbar, button: toolbar.backButton)
-            TelemetryWrapper.recordEvent(category: .action, method: .press, object: .navigateTabHistoryBack)
+
         }
     }
 
@@ -170,13 +170,13 @@ open class TabToolbarHelper: NSObject {
 
     func didClickForward() {
         toolbar.tabToolbarDelegate?.tabToolbarDidPressForward(toolbar, button: toolbar.forwardButton)
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .navigateTabHistoryForward)
+
     }
 
     func didLongPressForward(_ recognizer: UILongPressGestureRecognizer) {
         if recognizer.state == .began {
             toolbar.tabToolbarDelegate?.tabToolbarDidLongPressForward(toolbar, button: toolbar.forwardButton)
-            TelemetryWrapper.recordEvent(category: .action, method: .press, object: .navigateTabHistoryForward)
+
         }
     }
 
@@ -193,7 +193,7 @@ open class TabToolbarHelper: NSObject {
     }
 
     func didClickAddNewTab() {
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .addNewTabButton)
+
         toolbar.tabToolbarDelegate?.tabToolbarDidPressAddNewTab(toolbar, button: toolbar.addNewTabButton)
     }
 
@@ -202,7 +202,7 @@ open class TabToolbarHelper: NSObject {
         case .home:
             toolbar.tabToolbarDelegate?.tabToolbarDidPressHome(toolbar, button: toolbar.multiStateButton)
         case .search:
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .startSearchButton)
+
             toolbar.tabToolbarDelegate?.tabToolbarDidPressSearch(toolbar, button: toolbar.multiStateButton)
         case .stop:
             toolbar.tabToolbarDelegate?.tabToolbarDidPressStop(toolbar, button: toolbar.multiStateButton)

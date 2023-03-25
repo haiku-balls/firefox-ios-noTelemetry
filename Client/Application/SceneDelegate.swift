@@ -90,12 +90,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if profile.prefs.boolForKey(PrefsKeys.AppExtensionTelemetryOpenUrl) != nil {
             profile.prefs.removeObjectForKey(PrefsKeys.AppExtensionTelemetryOpenUrl)
 
-            var object = TelemetryWrapper.EventObject.url
-            if case .text = routerPath {
-                object = .searchText
-            }
+            // var object = TelemetryWrapper.EventObject.url
 
-            TelemetryWrapper.recordEvent(category: .appExtensionAction, method: .applicationOpenUrl, object: object)
+
         }
 
         DispatchQueue.main.async {

@@ -27,7 +27,7 @@ class EngagementNotificationHelper: FeatureFlaggable {
                                                                           checking: .buildOnly)
     private var allowedTipsNotifications: Bool {
         let featureEnabled = featureFlags.isFeatureEnabled(.notificationSettings, checking: .buildOnly)
-        let userPreference = prefs?.boolForKey(PrefsKeys.Notifications.TipsAndFeaturesNotifications) ?? true
+        let userPreference = prefs?.boolForKey(PrefsKeys.Notifications.TipsAndFeaturesNotifications) ?? false
         return featureEnabled && userPreference
     }
 
@@ -67,9 +67,7 @@ class EngagementNotificationHelper: FeatureFlaggable {
         if now > Date.fromTimestamp(firstAppUse + Constant.twentyFourHours) {
             // cancel as user used app between firstAppUse + 24h and firstAppUse + 48h
             cancelAll()
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .cancel,
-                                         object: .engagementNotification)
+
         } else {
             // schedule or update notification
             notificationManager.schedule(title: .EngagementNotification.Title,

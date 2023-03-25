@@ -112,13 +112,6 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     /// Handle impression reporting and bookkeeping.
     func onMessageDisplayed(_ message: GleanPlumbMessage) {
         messagingStore.onMessageDisplayed(message)
-
-        TelemetryWrapper.recordEvent(category: .information,
-                                     method: .view,
-                                     object: .messaging,
-                                     value: .messageImpression,
-                                     extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: message.id,
-                                              TelemetryWrapper.EventExtraKey.messageSurface.rawValue: message.data.surface.rawValue])
     }
 
     /// Handle when a user hits the CTA of the surface, and forward the bookkeeping to the store.
@@ -146,13 +139,6 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
             UIApplication.shared.open(url, options: [:])
         }
 
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .messaging,
-                                     value: .messageInteracted,
-                                     extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: message.id,
-                                              TelemetryWrapper.EventExtraKey.messageSurface.rawValue: message.data.surface.rawValue,
-                                              TelemetryWrapper.EventExtraKey.actionUUID.rawValue: uuid ?? "nil"])
     }
 
     /// For now, we will assume all dismissed messages should become expired right away. The
@@ -160,20 +146,10 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     func onMessageDismissed(_ message: GleanPlumbMessage) {
         messagingStore.onMessageDismissed(message)
 
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .messaging,
-                                     value: .messageDismissed,
-                                     extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: message.id,
-                                              TelemetryWrapper.EventExtraKey.messageSurface.rawValue: message.data.surface.rawValue])
     }
 
     func onMalformedMessage(messageKey: String) {
-        TelemetryWrapper.recordEvent(category: .information,
-                                     method: .application,
-                                     object: .messaging,
-                                     value: .messageMalformed,
-                                     extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: messageKey])
+
     }
 
     // MARK: - Misc. Private helpers

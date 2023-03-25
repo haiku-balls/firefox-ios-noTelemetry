@@ -211,8 +211,6 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
             SettingSection(title: NSAttributedString(string: .AppSettingsPrivacyTitle), children: privacySettings),
             SettingSection(title: NSAttributedString(string: .AppSettingsSupport), children: [
                 SendFeedbackSetting(),
-                SendAnonymousUsageDataSetting(prefs: prefs, delegate: settingsDelegate, theme: themeManager.currentTheme),
-                StudiesToggleSetting(prefs: prefs, delegate: settingsDelegate, theme: themeManager.currentTheme),
                 OpenSupportPageSetting(delegate: settingsDelegate, theme: themeManager.currentTheme),
             ]),
             SettingSection(title: NSAttributedString(string: .AppSettingsAbout), children: [
@@ -227,7 +225,6 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
                 SlowTheDatabase(settings: self),
                 ForgetSyncAuthStateDebugSetting(settings: self),
                 SentryIDSetting(settings: self),
-                ChangeToChinaSetting(settings: self),
                 TogglePullToRefresh(settings: self),
                 ResetWallpaperOnboardingPage(settings: self),
                 ToggleInactiveTabs(settings: self),

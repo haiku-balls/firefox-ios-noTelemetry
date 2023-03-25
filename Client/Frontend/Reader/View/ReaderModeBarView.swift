@@ -131,7 +131,7 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
     }
 
     @objc func tappedListStatusButton(_ sender: UIButton!) {
-        TelemetryWrapper.recordEvent(category: .action, method: added ? .delete : .add, object: .readingListItem, value: .readerModeToolbar)
+
         delegate?.readerModeBar(self, didSelectButton: added ? .removeFromReadingList : .addToReadingList)
     }
 

@@ -98,12 +98,5 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
                                        isFeatureEnabled: isFeatureEnabled)
     }
 
-    func sendCloseButtonTelemetry(index: Int) {
-        let extra = [TelemetryWrapper.EventExtraKey.cardType.rawValue: enabledCards[index].telemetryValue]
-
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .onboardingClose,
-                                     extras: extra)
-    }
+    
 }

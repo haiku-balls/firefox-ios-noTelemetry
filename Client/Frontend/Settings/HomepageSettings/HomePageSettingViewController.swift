@@ -189,10 +189,6 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
         let onOptionSelected: (Bool, StartAtHomeSetting) -> Void = { state, option in
             self.featureFlags.set(feature: .startAtHome, to: option)
             self.tableView.reloadData()
-
-            let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: PrefsKeys.FeatureFlags.StartAtHome,
-                          TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: option.rawValue]
-            TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: extras)
         }
 
         let afterFourHoursOption = CheckmarkSetting(

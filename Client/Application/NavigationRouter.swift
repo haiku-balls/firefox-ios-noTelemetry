@@ -157,7 +157,7 @@ enum NavigationPath {
                 return nil
             }
         } else if ["http", "https"].contains(scheme) {
-            TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
+
             RatingPromptManager.isBrowserDefault = true
             // Use the last browsing mode the user was in
             let isPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
@@ -214,32 +214,32 @@ enum NavigationPath {
         switch host {
         case "widget-medium-topsites-open-url":
             // Widget Top sites - open url
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumTopSitesWidget)
+
             return .openUrlFromComponents(components: components)
         case "widget-small-quicklink-open-url":
             // Widget Quick links - small - open url private or regular
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .smallQuickActionSearch)
+
             return .openUrlFromComponents(components: components)
         case "widget-medium-quicklink-open-url":
             // Widget Quick Actions - medium - open url private or regular
             let isPrivate = Bool(components.valueForQuery("private") ?? "") ?? UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: isPrivate ? .mediumQuickActionPrivateSearch : .mediumQuickActionSearch)
+
             return .openUrlFromComponents(components: components)
         case "widget-small-quicklink-open-copied", "widget-medium-quicklink-open-copied":
             // Widget Quick links - medium - open copied url
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumQuickActionCopiedLink)
+
             return .openCopiedUrl()
         case "widget-small-quicklink-close-private-tabs", "widget-medium-quicklink-close-private-tabs":
             // Widget Quick links - medium - close private tabs
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumQuickActionClosePrivate)
+
             return .closePrivateTabs
         case "widget-tabs-medium-open-url":
             // Widget Tabs Quick View - medium
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumTabsOpenUrl)
+
             return .openWidgetUrl(components: components)
         case "widget-tabs-large-open-url":
             // Widget Tabs Quick View - large
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .largeTabsOpenUrl)
+
             return .openWidgetUrl(components: components)
         default:
             return nil

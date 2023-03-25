@@ -91,7 +91,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                                       iconString: ImageIdentifiers.actionRemove,
                                       tapHandler: { _ in
             self.viewModel.historyHighlightsViewModel.delete(highlightItem)
-            self.sendHistoryHighlightContextualTelemetry(type: .remove)
+
         }).items]
     }
 
@@ -113,11 +113,8 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
             self.delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
 
             if sectionType == .pocket {
-                let originExtras = TelemetryWrapper.getOriginExtras(isZeroSearch: self.viewModel.isZeroSearch)
-                TelemetryWrapper.recordEvent(category: .action,
-                                             method: .tap,
-                                             object: .pocketStory,
-                                             extras: originExtras)
+
+
             }
         }.items
     }
@@ -138,7 +135,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                 site.setBookmarked(false)
             }
 
-            TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .activityStream)
+
         })
     }
 
@@ -159,7 +156,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                                                                                  withUserData: userData,
                                                                                  toApplication: .shared)
             site.setBookmarked(true)
-            TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .activityStream)
+
         })
     }
 
@@ -211,7 +208,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                                         delegate: delegate)
         let viewController = helper.initialViewController()
 
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice)
+
         self.delegate?.presentWithModalDismissIfNeeded(viewController, animated: true)
     }
 
@@ -247,7 +244,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                 self?.viewModel.topSiteViewModel.hideURLFromTopSites(site)
             }
 
-            self.sendTopSiteContextualTelemetry(type: .remove)
+
         }).items
     }
 
@@ -256,7 +253,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                                      iconString: ImageIdentifiers.addShortcut,
                                      tapHandler: { _ in
             self.viewModel.topSiteViewModel.pinTopSite(site)
-            self.sendTopSiteContextualTelemetry(type: .pin)
+
         }).items
     }
 
@@ -266,14 +263,14 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                                      iconString: ImageIdentifiers.removeFromShortcut,
                                      tapHandler: { _ in
             self.viewModel.topSiteViewModel.removePinTopSite(site)
-            self.sendTopSiteContextualTelemetry(type: .unpin)
+
         }).items
     }
 
     private func getSettingsAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.Settings, iconString: ImageIdentifiers.settings, tapHandler: { _ in
             self.delegate?.homePanelDidRequestToOpenSettings(at: .customizeTopSites)
-            self.sendTopSiteContextualTelemetry(type: .settings)
+
         }).items
     }
 
@@ -281,7 +278,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         return SingleActionViewModel(title: .FirefoxHomepage.ContextualMenu.SponsoredContent, iconString: ImageIdentifiers.help, tapHandler: { _ in
             guard let url = SupportUtils.URLForTopic("sponsor-privacy") else { return }
             self.delegate?.homePanelDidRequestToOpenInNewTab(url, isPrivate: false, selectNewTab: true)
-            self.sendTopSiteContextualTelemetry(type: .sponsoredSupport)
+
         }).items
     }
 
@@ -293,23 +290,10 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         }
     }
 
-    // MARK: Telemetry
+    // MARK: (No more) Telemetry
 
     enum ContextualActionType: String {
         case remove, unpin, pin, settings, sponsoredSupport
     }
 
-    private func sendTopSiteContextualTelemetry(type: ContextualActionType) {
-        let extras = [TelemetryWrapper.EventExtraKey.contextualMenuType.rawValue: type.rawValue]
-        TelemetryWrapper.recordEvent(category: .action, method: .view, object: .topSiteContextualMenu, value: nil, extras: extras)
-    }
-
-    func sendHistoryHighlightContextualTelemetry(type: ContextualActionType) {
-        let extras = [TelemetryWrapper.EventExtraKey.contextualMenuType.rawValue: type.rawValue]
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .view,
-                                     object: .historyHighlightContextualMenu,
-                                     value: nil,
-                                     extras: extras)
-    }
 }

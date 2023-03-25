@@ -304,11 +304,7 @@ class TabTrayViewController: UIViewController, Themeable {
         case .privateTabs:
             switchBetweenLocalPanels(withPrivateMode: true)
         case .syncedTabs:
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .tap,
-                                         object: .libraryPanel,
-                                         value: .syncPanel,
-                                         extras: nil)
+
             if children.first == viewModel.tabTrayView {
                 hideCurrentPanel()
                 updateToolbarItems(forSyncTabs: viewModel.profile.hasSyncableAccount())
@@ -545,7 +541,7 @@ extension TabTrayViewController: UIAdaptivePresentationControllerDelegate, UIPop
 
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         notificationCenter.post(name: .TabsTrayDidClose)
-        TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
+
     }
 }
 
@@ -579,13 +575,13 @@ extension TabTrayViewController: RemotePanelDelegate {
     }
 
     func remotePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
-        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .syncTab)
+
         self.openInNewTab?(url, isPrivate)
         self.dismissVC()
     }
 
     func remotePanel(didSelectURL url: URL, visitType: VisitType) {
-        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .syncTab)
+ 
         self.didSelectUrl?(url, visitType)
         self.dismissVC()
     }

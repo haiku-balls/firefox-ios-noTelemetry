@@ -115,7 +115,6 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
 
     @objc private func closeOnboarding() {
         didFinishFlow?()
-        viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
     }
 
     func getNextOnboardingCard(index: Int, goForward: Bool) -> OnboardingCardViewController? {

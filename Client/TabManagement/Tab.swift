@@ -390,8 +390,6 @@ class Tab: NSObject {
         super.init()
         self.isPrivate = isPrivate
         debugTabCount += 1
-
-        TelemetryWrapper.recordEvent(category: .action, method: .add, object: .tab, value: isPrivate ? .privateTab : .normalTab)
     }
 
     class func toRemoteTab(_ tab: Tab) -> RemoteTab? {
@@ -800,18 +798,6 @@ class Tab: NSObject {
     func applyTheme() {
         UITextField.appearance().keyboardAppearance = isPrivate ? .dark : (LegacyThemeManager.instance.currentName == .dark ? .dark : .light)
     }
-
-    func getProviderForUrl() -> SearchEngine {
-        guard let url = self.webView?.url else {
-            return .none
-        }
-        for provider in SearchEngine.allCases {
-            if url.absoluteString.contains(provider.rawValue) {
-                return provider
-            }
-        }
-        return .none
-    }
 }
 
 extension Tab: UIGestureRecognizerDelegate {
@@ -833,7 +819,7 @@ extension Tab: UIGestureRecognizerDelegate {
         guard let webView = webView else { return }
 
         if sender.state == .ended, (sender.velocity(in: webView).x > 150) {
-            TelemetryWrapper.recordEvent(category: .action, method: .swipe, object: .navigateTabHistoryBackSwipe)
+            
         }
     }
 }

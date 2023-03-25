@@ -50,46 +50,12 @@ class TopSitesViewModel {
     }
 
     func tilePressed(site: TopSite, position: Int) {
-        topSitePressTracking(homeTopSite: site, position: position)
+
         tilePressedHandler?(site.site, site.isGoogleURL)
     }
 
-    // MARK: - Telemetry
+    // MARK: - (No more) Telemetry
 
-    func sendImpressionTelemetry(_ homeTopSite: TopSite, position: Int) {
-        guard !hasSentImpressionForTile(homeTopSite) else { return }
-        homeTopSite.impressionTracking(position: position)
-    }
-
-    private func topSitePressTracking(homeTopSite: TopSite, position: Int) {
-        // Top site extra
-        let type = homeTopSite.getTelemetrySiteType()
-        let topSiteExtra = [TelemetryWrapper.EventExtraKey.topSitePosition.rawValue: "\(position)",
-                            TelemetryWrapper.EventExtraKey.topSiteTileType.rawValue: type]
-
-        // Origin extra
-        let originExtra = TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
-        let extras = originExtra.merge(with: topSiteExtra)
-
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .topSiteTile,
-                                     value: nil,
-                                     extras: extras)
-
-        // Sponsored tile specific telemetry
-        if let tile = homeTopSite.site as? SponsoredTile {
-            SponsoredTileTelemetry.sendClickTelemetry(tile: tile, position: position)
-        }
-    }
-
-    private func hasSentImpressionForTile(_ homeTopSite: TopSite) -> Bool {
-        guard sentImpressionTelemetry[homeTopSite.site.url] != nil else {
-            sentImpressionTelemetry[homeTopSite.site.url] = true
-            return false
-        }
-        return true
-    }
 
     // MARK: - Context actions
 
@@ -226,7 +192,7 @@ extension TopSitesViewModel: HomepageSectionHandler {
                            position: indexPath.row,
                            theme: theme,
                            textColor: textColor)
-            sendImpressionTelemetry(contentItem, position: indexPath.row)
+
             return cell
         } else if let cell = collectionView.dequeueReusableCell(cellType: EmptyTopSiteCell.self, for: indexPath) {
             cell.applyTheme(theme: theme)

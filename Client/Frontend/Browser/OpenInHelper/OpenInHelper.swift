@@ -64,7 +64,7 @@ class DownloadHelper: NSObject {
     static func requestDownload(url: URL, tab: Tab) {
         let safeUrl = url.absoluteString.replacingOccurrences(of: "'", with: "%27")
         tab.webView?.evaluateJavascriptInDefaultContentWorld("window.__firefox__.download('\(safeUrl)', '\(UserScriptManager.appIdToken)')")
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .downloadLinkButton)
+
     }
 
     required init?(
@@ -126,7 +126,6 @@ class DownloadHelper: NSObject {
 
         let downloadFileItem = SingleActionViewModel(title: .OpenInDownloadHelperAlertDownloadNow, iconString: "download") { _ in
             okAction(download)
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .downloadNowButton)
         }
 
         let actions = [[filenameItem.items], [downloadFileItem.items]]

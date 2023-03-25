@@ -101,26 +101,12 @@ private extension SearchBarSettingsViewModel {
     func saveSearchBarPosition(_ searchBarPosition: SearchBarPosition) {
         featureFlags.set(feature: .searchBarPosition, to: searchBarPosition)
         delegate?.didUpdateSearchBarPositionPreference()
-        recordPreferenceChange(searchBarPosition)
+
 
         let notificationObject = [PrefsKeys.FeatureFlags.SearchBarPosition: searchBarPosition]
         notificationCenter.post(name: .SearchBarPositionDidChange, object: notificationObject)
     }
 
-    func recordPreferenceChange(_ searchBarPosition: SearchBarPosition) {
-        let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: PrefsKeys.FeatureFlags.SearchBarPosition,
-                      TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: searchBarPosition.rawValue]
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .change,
-                                     object: .setting,
-                                     extras: extras)
-    }
 }
 
-// MARK: Telemetry
-extension SearchBarSettingsViewModel {
-    static func recordLocationTelemetry(for searchbarPosition: SearchBarPosition) {
-        let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: searchbarPosition.rawValue]
-        TelemetryWrapper.recordEvent(category: .information, method: .view, object: .awesomebarLocation, extras: extras)
-    }
-}
+// MARK: (No more) Telemetry

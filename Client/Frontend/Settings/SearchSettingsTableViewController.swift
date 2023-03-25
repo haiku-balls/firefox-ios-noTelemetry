@@ -365,9 +365,7 @@ extension SearchSettingsTableViewController: SearchEnginePickerDelegate {
             updateSearchIcon?()
             self.tableView.reloadData()
 
-            let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: "defaultSearchEngine",
-                          TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: engine.engineID ?? "custom"]
-            TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: extras)
+
         }
         _ = navigationController?.popViewController(animated: true)
     }

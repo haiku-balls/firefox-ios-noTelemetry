@@ -91,7 +91,7 @@ class WallpaperSelectorViewController: WallpaperBaseViewController, Themeable {
 
         collectionView.selectItem(at: viewModel.selectedIndexPath, animated: false, scrollPosition: [])
 
-        viewModel.sendImpressionTelemetry()
+
     }
 
     override func updateOnRotation() {
@@ -225,6 +225,6 @@ private extension WallpaperSelectorViewController {
 extension WallpaperSelectorViewController: BottomSheetChild {
     func willDismiss() {
         viewModel.removeAssetsOnDismiss()
-        viewModel.sendDismissImpressionTelemetry()
+
     }
 }

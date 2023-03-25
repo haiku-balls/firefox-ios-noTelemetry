@@ -52,17 +52,9 @@ class ShareExtensionHelper: NSObject, FeatureFlaggable {
 
             // Add telemetry for Pocket activityType
             if activityType?.rawValue == self.pocketIconExtension {
-                TelemetryWrapper.recordEvent(category: .action,
-                                             method: .tap,
-                                             object: .shareSheet,
-                                             value: .sharePocketIcon,
-                                             extras: nil)
+
             } else if activityType?.rawValue == self.pocketActionExtension {
-                TelemetryWrapper.recordEvent(category: .action,
-                                             method: .tap,
-                                             object: .shareSheet,
-                                             value: .shareSaveToPocket,
-                                             extras: nil)
+ 
             }
 
             completionHandler(completed, activityType)

@@ -305,7 +305,7 @@ class DownloadsPanel: UIViewController,
         tableView.deselectRow(at: indexPath, animated: true)
 
         if let downloadedFile = viewModel.downloadedFileForIndexPath(indexPath) {
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .download, value: .downloadsPanel)
+
 
             if downloadedFile.mimeType == MIMEType.Calendar {
                 let docController = UIDocumentInteractionController(url: downloadedFile.path)
@@ -341,7 +341,7 @@ class DownloadsPanel: UIViewController,
                 strongSelf.tableView.deleteRows(at: [indexPath], with: .right)
                 strongSelf.tableView.endUpdates()
                 strongSelf.updateEmptyPanelState()
-                TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .download, value: .downloadsPanel)
+
                 completion(true)
             } else {
                 completion(false)
@@ -354,7 +354,7 @@ class DownloadsPanel: UIViewController,
             view.backgroundColor = strongSelf.view.tintColor
             if let downloadedFile = strongSelf.viewModel.downloadedFileForIndexPath(indexPath) {
                 strongSelf.shareDownloadedFile(downloadedFile, indexPath: indexPath)
-                TelemetryWrapper.recordEvent(category: .action, method: .share, object: .download, value: .downloadsPanel)
+
                 completion(true)
             } else {
                 completion(false)

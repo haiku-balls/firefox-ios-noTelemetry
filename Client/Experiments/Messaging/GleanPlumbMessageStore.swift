@@ -75,11 +75,7 @@ class GleanPlumbMessageStore: GleanPlumbMessageStoreProtocol {
         messageData.isExpired = true
 
         if shouldReport {
-            TelemetryWrapper.recordEvent(category: .information,
-                                         method: .view,
-                                         object: .messaging,
-                                         value: .messageExpired,
-                                         extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: messageData.id])
+
         }
     }
 

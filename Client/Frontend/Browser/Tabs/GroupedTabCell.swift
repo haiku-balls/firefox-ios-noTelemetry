@@ -153,7 +153,7 @@ class GroupedTabCell: UICollectionViewCell,
     }
 
     func closeTab(tab: Tab) {
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .groupedTab, value: .closeGroupedTab, extras: nil)
+
         tabDisplayManagerDelegate?.closeGroupTab(tab: tab)
     }
 

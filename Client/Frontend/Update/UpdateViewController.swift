@@ -140,7 +140,7 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
     // Button Actions
     @objc private func closeUpdate() {
         didFinishFlow?()
-        viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
+
     }
 
     func getNextOnboardingCard(index: Int, goForward: Bool) -> OnboardingCardViewController? {

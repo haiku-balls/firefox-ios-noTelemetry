@@ -148,7 +148,7 @@ extension BrowserViewController: WKUIDelegate {
                        !currentTab.adsTelemetryUrlList.isEmpty,
                        currentTab.adsTelemetryUrlList.contains(adUrl),
                        !currentTab.adsProviderName.isEmpty {
-                        AdsTelemetryHelper.trackAdsClickedOnPage(providerName: currentTab.adsProviderName)
+
                         currentTab.adsTelemetryUrlList.removeAll()
                         currentTab.adsTelemetryRedirectUrlList.removeAll()
                         currentTab.adsProviderName = ""
@@ -236,10 +236,7 @@ extension BrowserViewController: WKUIDelegate {
                     identifier: UIAction.Identifier("linkContextMenu.bookmarkLink")
                 ) { _ in
                     self.addBookmark(url: url.absoluteString, title: elements.title)
-                    TelemetryWrapper.recordEvent(category: .action,
-                                                 method: .add,
-                                                 object: .bookmark,
-                                                 value: .contextMenu)
+
                 }
 
                 let removeAction = UIAction(
@@ -248,10 +245,7 @@ extension BrowserViewController: WKUIDelegate {
                     identifier: UIAction.Identifier("linkContextMenu.removeBookmarkLink")
                 ) { _ in
                     self.removeBookmark(url: url.absoluteString)
-                    TelemetryWrapper.recordEvent(category: .action,
-                                                 method: .delete,
-                                                 object: .bookmark,
-                                                 value: .contextMenu)
+
                 }
 
                 let isBookmarkedSite = profile.places.isBookmarked(url: url.absoluteString).value.successValue ?? false
@@ -417,7 +411,7 @@ extension BrowserViewController: WKNavigationDelegate {
            !tab.adsTelemetryUrlList.isEmpty {
             let adUrl = url.absoluteString
             if tab.adsTelemetryUrlList.contains(adUrl) {
-                if !tab.adsProviderName.isEmpty { AdsTelemetryHelper.trackAdsClickedOnPage(providerName: tab.adsProviderName) }
+                if !tab.adsProviderName.isEmpty {  }
                 tab.adsTelemetryUrlList.removeAll()
                 tab.adsTelemetryRedirectUrlList.removeAll()
                 tab.adsProviderName = ""
@@ -735,7 +729,7 @@ extension BrowserViewController: WKNavigationDelegate {
               let metadataManager = tab.metadataManager
         else { return }
 
-        searchTelemetry?.trackTabAndTopSiteSAP(tab, webView: webView)
+
         tab.url = webView.url
 
         // Only update search term data with valid search term data
@@ -747,7 +741,7 @@ extension BrowserViewController: WKNavigationDelegate {
                let startingRedirectHost = tab.startingSearchUrlWithAds?.host,
                let lastRedirectHost = tab.adsTelemetryRedirectUrlList.last?.host,
                lastRedirectHost != startingRedirectHost {
-                AdsTelemetryHelper.trackAdsClickedOnPage(providerName: tab.adsProviderName)
+ 
                 tab.adsTelemetryUrlList.removeAll()
                 tab.adsTelemetryRedirectUrlList.removeAll()
                 tab.adsProviderName = ""

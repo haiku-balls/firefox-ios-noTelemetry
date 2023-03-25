@@ -38,9 +38,9 @@ class NoImageModeHelper: TabContentScript {
         tabManager.tabs.forEach { $0.noImageMode = isEnabled }
 
         if isEnabled {
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .blockImagesEnabled)
+
         } else {
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .blockImagesDisabled)
+
         }
     }
 }

@@ -21,30 +21,25 @@ class SponsoredTileTelemetryTests: XCTestCase {
     // MARK: Context id
 
     func testContextId_isNilByDefault() {
-        XCTAssertNil(SponsoredTileTelemetry.contextId)
+        
     }
 
     func testContextId_isCreated() {
-        SponsoredTileTelemetry.setupContextId()
-        XCTAssertNotNil(SponsoredTileTelemetry.contextId)
+
     }
 
     func testContextId_isReusedAfterCreation() {
-        SponsoredTileTelemetry.setupContextId()
-        let contextId = SponsoredTileTelemetry.contextId
-        SponsoredTileTelemetry.setupContextId()
-        XCTAssertEqual(contextId, SponsoredTileTelemetry.contextId)
+        
     }
 
     func testTelemetryWrapper_setsContextId() {
-        TelemetryWrapper.shared.setup(profile: MockProfile())
-        XCTAssertNotNil(SponsoredTileTelemetry.contextId)
+
     }
 
     // MARK: Impression
 
     func testImpressionTopSite() {
-        SponsoredTileTelemetry.setupContextId()
+
         let contile = ContileProviderMock.defaultSuccessData[0]
         let topSite = SponsoredTile(contile: contile)
 
@@ -67,7 +62,7 @@ class SponsoredTileTelemetryTests: XCTestCase {
             expectation.fulfill()
         }
 
-        SponsoredTileTelemetry.sendImpressionTelemetry(tile: topSite, position: 2)
+
 
         waitForExpectations(timeout: 5.0)
     }
@@ -75,7 +70,7 @@ class SponsoredTileTelemetryTests: XCTestCase {
     // MARK: Click
 
     func testClickTopSite() {
-        SponsoredTileTelemetry.setupContextId()
+
         let contile = ContileProviderMock.defaultSuccessData[1]
         let topSite = SponsoredTile(contile: contile)
 
@@ -97,24 +92,20 @@ class SponsoredTileTelemetryTests: XCTestCase {
             expectation.fulfill()
         }
 
-        SponsoredTileTelemetry.sendClickTelemetry(tile: topSite, position: 3)
+
 
         waitForExpectations(timeout: 5.0)
     }
 
     // MARK: ContexId
     func testContextIdImpressionTopSite() {
-        SponsoredTileTelemetry.setupContextId()
+
         let contile = ContileProviderMock.defaultSuccessData[0]
         let topSite = SponsoredTile(contile: contile)
 
         let expectation = expectation(description: "The top sites ping was sent")
         GleanMetrics.Pings.shared.topsitesImpression.testBeforeNextSubmit { _ in
-            guard let contextId =  SponsoredTileTelemetry.contextId,
-                    let uuid = UUID(uuidString: contextId) else {
-                XCTFail("Expected contextId to be configured")
-                return
-            }
+
 
             self.testUuidMetricSuccess(metric: GleanMetrics.TopSites.contextId,
                                        expectedValue: uuid,
@@ -122,7 +113,7 @@ class SponsoredTileTelemetryTests: XCTestCase {
             expectation.fulfill()
         }
 
-        SponsoredTileTelemetry.sendImpressionTelemetry(tile: topSite, position: 2)
+
         waitForExpectations(timeout: 5.0)
     }
 }
@@ -132,6 +123,6 @@ extension SponsoredTileTelemetryTests {
     func clearTest() {
         Glean.shared.resetGlean(clearStores: true)
         Glean.shared.enableTestingMode()
-        SponsoredTileTelemetry.clearUserDefaults()
+
     }
 }

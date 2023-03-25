@@ -122,7 +122,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         profile.syncManager.applicationDidBecomeActive()
         webServerUtil?.setUpWebServer()
 
-        TelemetryWrapper.recordEvent(category: .action, method: .foreground, object: .app)
 
         // update top sites widget
         updateTopSitesWidget()
@@ -154,8 +153,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                    level: .info,
                    category: .lifecycle)
 
-        TelemetryWrapper.recordEvent(category: .action, method: .background, object: .app)
-        TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
+
 
         profile.syncManager.applicationDidEnterBackground()
 

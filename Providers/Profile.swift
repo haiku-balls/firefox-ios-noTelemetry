@@ -585,7 +585,7 @@ open class BrowserProfile: Profile {
             // an events-only ping now.
             return
         }
-        let sendUsageData = prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
+        let sendUsageData = false
         if sendUsageData {
             SyncPing.fromQueuedEvents(
                 prefs: self.prefs,
@@ -856,7 +856,7 @@ open class BrowserProfile: Profile {
         }
 
         func canSendUsageData() -> Bool {
-            return profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
+            return false
         }
 
         private func notifySyncing(notification: Notification.Name) {

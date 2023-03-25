@@ -116,37 +116,7 @@ class ContextualHintViewModel: ContextualHintPrefsKeysProvider {
         }
     }
 
-    // MARK: - Telemetry
-    func sendTelemetryEvent(for eventType: CFRTelemetryEvent) {
-        let hintTypeExtra = hintType == .toolbarLocation ? getToolbarLocation() : hintType.rawValue
-        let extra = [TelemetryWrapper.EventExtraKey.cfrType.rawValue: hintTypeExtra]
-
-        switch eventType {
-        case .closeButton:
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .tap,
-                                         object: .contextualHint,
-                                         value: .dismissCFRFromButton,
-                                         extras: extra)
-            hasSentTelemetryEvent = true
-
-        case .tapToDismiss:
-            if hasSentTelemetryEvent { return }
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .tap,
-                                         object: .contextualHint,
-                                         value: .dismissCFRFromOutsideTap,
-                                         extras: extra)
-
-        case .performAction:
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .tap,
-                                         object: .contextualHint,
-                                         value: .pressCFRActionButton,
-                                         extras: extra)
-            hasSentTelemetryEvent = true
-        }
-    }
+    // MARK: - (No more) Telemetry
 
     private func getToolbarLocation() -> String {
         guard isBottomSearchBar else { return "ToolbarLocationTop" }

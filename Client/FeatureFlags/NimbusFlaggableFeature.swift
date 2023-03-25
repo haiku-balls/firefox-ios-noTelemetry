@@ -123,8 +123,12 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         let nimbusValue = nimbusLayer.checkNimbusConfigFor(featureID)
 
         switch featureID {
+        
+        // Haiku: Force disable flags.
         case .pocket, .sponsoredPocket:
-            return nimbusValue && PocketProvider.islocaleSupported(Locale.current.identifier)
+            return false
+        case .sponsoredTiles:
+            return false
         default:
             return nimbusValue
         }

@@ -73,45 +73,23 @@ class JumpBackInViewModel: FeatureFlaggable {
         guard let firstTab = group.groupedItems.first else { return }
 
         onTapGroup?(firstTab)
-
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .tap,
-            object: .firefoxHomepage,
-            value: .jumpBackInSectionGroupOpened,
-            extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
-        )
     }
 
     func switchTo(tab: Tab) {
         if urlBar.inOverlayMode { urlBar.leaveOverlayMode() }
 
         tabManager.selectTab(tab, previous: nil)
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .tap,
-            object: .firefoxHomepage,
-            value: .jumpBackInSectionTabOpened,
-            extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
-        )
+
     }
 
     func sendImpressionTelemetry() {
         if !hasSentJumpBackInTileEvent, hasJumpBackIn {
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .view,
-                                         object: .jumpBackInTileImpressions,
-                                         value: nil,
-                                         extras: nil)
+
             hasSentJumpBackInTileEvent = true
         }
 
         if !hasSentSyncedTabTileEvent, hasSyncedTab {
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .view,
-                                         object: .syncedTabTileImpressions,
-                                         value: nil,
-                                         extras: nil)
+
             hasSentSyncedTabTileEvent = true
         }
     }

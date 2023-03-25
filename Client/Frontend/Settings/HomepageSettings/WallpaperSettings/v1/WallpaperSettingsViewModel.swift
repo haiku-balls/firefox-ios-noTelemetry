@@ -204,35 +204,9 @@ private extension WallpaperSettingsViewModel {
                                 in collection: WallpaperCollection,
                                 completion: @escaping (Result<Void, Error>) -> Void) {
         wallpaperManager.setCurrentWallpaper(to: wallpaper) { [weak self] result in
-            guard let extra = self?.telemetryMetadata(for: wallpaper, in: collection) else {
-                completion(result)
-                return
-            }
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .tap,
-                                         object: .wallpaperSettings,
-                                         value: .wallpaperSelected,
-                                         extras: extra)
-
            completion(result)
         }
     }
 
-    func telemetryMetadata(for wallpaper: Wallpaper, in collection: WallpaperCollection) -> [String: String] {
-        var metadata = [String: String]()
-
-        metadata[TelemetryWrapper.EventExtraKey.wallpaperName.rawValue] = wallpaper.id
-
-        let wallpaperTypeKey = TelemetryWrapper.EventExtraKey.wallpaperType.rawValue
-        switch (wallpaper.type, collection.type) {
-        case (.defaultWallpaper, _):
-            metadata[wallpaperTypeKey] = "default"
-        case (.other, .classic):
-            metadata[wallpaperTypeKey] = collection.type.rawValue
-        case (.other, .limitedEdition):
-            metadata[wallpaperTypeKey] = collection.id
-        }
-
-        return metadata
-    }
+    
 }

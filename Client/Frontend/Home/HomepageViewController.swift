@@ -535,13 +535,9 @@ private extension HomepageViewController {
 
             var extras: [String: String]?
             if let isZeroSearch = self?.viewModel.isZeroSearch {
-                extras = TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
+                
             }
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .tap,
-                                         object: .firefoxHomepage,
-                                         value: .jumpBackInSectionSyncedTabShowAll,
-                                         extras: extras)
+
         }
 
         viewModel.jumpBackInViewModel.openSyncedTabAction = { [weak self] tabURL in
@@ -549,13 +545,9 @@ private extension HomepageViewController {
 
             var extras: [String: String]?
             if let isZeroSearch = self?.viewModel.isZeroSearch {
-                extras = TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch)
+               
             }
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .tap,
-                                         object: .firefoxHomepage,
-                                         value: .jumpBackInSectionSyncedTabOpened,
-                                         extras: extras)
+
         }
 
         viewModel.jumpBackInViewModel.prepareContextualHint = { [weak self] syncedTabCell in
@@ -622,11 +614,6 @@ private extension HomepageViewController {
 
         self.present(dismissableController, animated: true, completion: nil)
 
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .firefoxHomepage,
-                                     value: .historyHighlightsGroupOpen,
-                                     extras: nil)
 
         asGroupListVC.libraryPanelDelegate = libraryPanelDelegate
     }
@@ -640,11 +627,7 @@ private extension HomepageViewController {
         homePanelDelegate?.homePanelDidRequestToOpenTabTray(withFocusedTab: nil)
 
         if sender.accessibilityIdentifier == a11y.MoreButtons.jumpBackIn {
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .tap,
-                                         object: .firefoxHomepage,
-                                         value: .jumpBackInSectionShowAll,
-                                         extras: TelemetryWrapper.getOriginExtras(isZeroSearch: viewModel.isZeroSearch))
+
         }
     }
 
@@ -652,11 +635,7 @@ private extension HomepageViewController {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .bookmarks)
 
         if sender.accessibilityIdentifier == a11y.MoreButtons.recentlySaved {
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .tap,
-                                         object: .firefoxHomepage,
-                                         value: .recentlySavedSectionShowAll,
-                                         extras: TelemetryWrapper.getOriginExtras(isZeroSearch: viewModel.isZeroSearch))
+
         }
     }
 
@@ -664,19 +643,13 @@ private extension HomepageViewController {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .history)
 
         if sender.accessibilityIdentifier == a11y.MoreButtons.historyHighlights {
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .tap,
-                                         object: .firefoxHomepage,
-                                         value: .historyHighlightsShowAll)
+ 
         }
     }
 
     func openCustomizeHomeSettings() {
         homePanelDelegate?.homePanelDidRequestToOpenSettings(at: .customizeHomepage)
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .firefoxHomepage,
-                                     value: .customizeHomepageButton)
+
     }
 
     func contextualHintPresented(type: ContextualHintType) {

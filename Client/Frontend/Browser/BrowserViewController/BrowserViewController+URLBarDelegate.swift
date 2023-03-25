@@ -74,7 +74,7 @@ extension BrowserViewController: URLBarDelegate {
         if let tab = tabManager.selectedTab {
             screenshotHelper.takeScreenshot(tab)
         }
-        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .tabTray)
+
 
         // App store review in-app prompt
         ratingPromptManager.showRatingPromptIfNeeded()
@@ -85,11 +85,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressShare(_ urlBar: URLBarView, shareView: UIView) {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .awesomebarLocation,
-                                     value: .awesomebarShareTap,
-                                     extras: nil)
+
 
         if let selectedtab = tabManager.selectedTab, let tabUrl = selectedtab.canonicalURL?.displayURL {
             presentShareSheet(tabUrl,
@@ -139,7 +135,7 @@ extension BrowserViewController: URLBarDelegate {
                 etpVC.popoverPresentationController?.delegate = self
             }
 
-            TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
+
             self.present(etpVC, animated: true, completion: nil)
         }
     }
@@ -160,10 +156,10 @@ extension BrowserViewController: URLBarDelegate {
         switch readerMode.state {
         case .available:
             enableReaderMode()
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readerModeOpenButton)
+
         case .active:
             disableReaderMode()
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readerModeCloseButton)
+
         case .unavailable:
             break
         }
@@ -315,7 +311,6 @@ extension BrowserViewController: URLBarDelegate {
         // We couldn't find a matching search keyword, so do a search query.
         Telemetry.default.recordSearch(location: .actionBar, searchEngine: engine.engineID ?? "other")
         GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.actionBar.rawValue)"].add()
-        searchTelemetry?.shouldSetUrlTypeSearch = true
 
         let searchData = LegacyTabGroupData(searchTerm: text,
                                             searchUrl: searchURL.absoluteString,

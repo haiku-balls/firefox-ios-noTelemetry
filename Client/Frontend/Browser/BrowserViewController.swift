@@ -55,7 +55,7 @@ class BrowserViewController: UIViewController {
     var statusBarOverlay: UIView = UIView()
     var searchController: SearchViewController?
     var screenshotHelper: ScreenshotHelper!
-    var searchTelemetry: SearchTelemetry?
+
     var searchLoader: SearchLoader?
     var findInPageBar: FindInPageBar?
     var zoomPageBar: ZoomPageBar?
@@ -411,7 +411,7 @@ class BrowserViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         KeyboardHelper.defaultHelper.addDelegate(self)
-        trackTelemetry()
+
         setupNotifications()
         addSubviews()
 
@@ -459,10 +459,8 @@ class BrowserViewController: UIViewController {
 
         updateLegacyTheme()
 
-        searchTelemetry = SearchTelemetry()
 
-        // Awesomebar Location Telemetry
-        SearchBarSettingsViewModel.recordLocationTelemetry(for: isBottomSearchBar ? .bottom : .top)
+
     }
 
     private func setupNotifications() {
@@ -1204,7 +1202,7 @@ class BrowserViewController: UIViewController {
     /// to fetch the last added bookmark in the mobile folder, which is the default
     /// location for all bookmarks added on mobile.
     private func openBookmarkEditPanel() {
-        TelemetryWrapper.recordEvent(category: .action, method: .change, object: .bookmark, value: .addBookmarkToast)
+
         if profile.isShutdown { return }
         profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false).uponQueue(.main) { result in
             guard let bookmarkFolder = result.successValue as? BookmarkFolderData,
@@ -1321,7 +1319,7 @@ class BrowserViewController: UIViewController {
                 tab.lastTitle = title
                 navigateInTab(tab: tab, webViewStatus: .title)
             }
-            TelemetryWrapper.recordEvent(category: .action, method: .navigate, object: .tab)
+
         case .canGoBack:
             guard tab === tabManager.selectedTab,
                   let canGoBack = change?[.newKey] as? Bool
@@ -1553,7 +1551,7 @@ class BrowserViewController: UIViewController {
                                         delegate: self)
         let viewController = helper.initialViewController()
 
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice)
+
         showViewController(viewController: viewController)
     }
 
@@ -1681,11 +1679,11 @@ extension BrowserViewController: QRCodeViewControllerDelegate {
     func didScanQRCodeWithURL(_ url: URL) {
         guard let tab = tabManager.selectedTab else { return }
         finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
-        TelemetryWrapper.recordEvent(category: .action, method: .scan, object: .qrCodeURL)
+
     }
 
     func didScanQRCodeWithText(_ text: String) {
-        TelemetryWrapper.recordEvent(category: .action, method: .scan, object: .qrCodeText)
+
         let defaultAction: () -> Void = { [weak self] in
             guard let tab = self?.tabManager.selectedTab else { return }
             self?.submitSearchText(text, forTab: tab)
@@ -1790,8 +1788,6 @@ extension BrowserViewController: LegacyTabDelegate {
         findInPageHelper.delegate = self
         tab.addContentScript(findInPageHelper, name: FindInPageHelper.name())
 
-        let adsHelper = AdsTelemetryHelper(tab: tab)
-        tab.addContentScript(adsHelper, name: AdsTelemetryHelper.name())
 
         let noImageModeHelper = NoImageModeHelper(tab: tab)
         tab.addContentScript(noImageModeHelper, name: NoImageModeHelper.name())
@@ -1930,7 +1926,7 @@ extension BrowserViewController: HomePanelDelegate {
         guard let tab = tabManager.selectedTab else { return }
         if isGoogleTopSite {
             tab.urlType = .googleTopSite
-            searchTelemetry?.shouldSetGoogleTopSiteSearch = true
+
         }
 
         // Handle keyboard shortcuts from homepage with url selection (ex: Cmd + Tap on Link; which is a cell in this case)
@@ -2025,7 +2021,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
                                             searchUrl: url.absoluteString,
                                             nextReferralUrl: "")
         tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData, isPrivate: tab.isPrivate)
-        searchTelemetry?.shouldSetUrlTypeSearch = true
+
         finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
     }
 
@@ -2409,7 +2405,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
             let bookmarkAction = UIAlertAction(title: .ContextMenuBookmarkLink, style: .default) { _ in
                 self.addBookmark(url: url.absoluteString, title: elements.title)
-                TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .contextMenu)
+
             }
             actionSheetController.addAction(bookmarkAction, accessibilityIdentifier: "linkContextMenu.bookmarkLink")
 
@@ -2613,7 +2609,7 @@ extension BrowserViewController: TabTrayDelegate {
         guard let url = tab.url?.absoluteString, !url.isEmpty else { return }
         let tabState = tab.tabState
         addBookmark(url: url, title: tabState.title)
-        TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .tabTray)
+
     }
 
     func tabTrayDidAddToReadingList(_ tab: Tab) -> ReadingListItem? {
@@ -2777,41 +2773,5 @@ extension BrowserViewController {
 }
 
 extension BrowserViewController {
-    func trackTelemetry() {
-        trackAccessibility()
-        trackNotificationPermission()
-    }
-
-    func trackAccessibility() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .voiceOver,
-                                     object: .app,
-                                     extras: [TelemetryWrapper.EventExtraKey.isVoiceOverRunning.rawValue: UIAccessibility.isVoiceOverRunning.description])
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .switchControl,
-                                     object: .app,
-                                     extras: [TelemetryWrapper.EventExtraKey.isSwitchControlRunning.rawValue: UIAccessibility.isSwitchControlRunning.description])
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .reduceTransparency,
-                                     object: .app,
-                                     extras: [TelemetryWrapper.EventExtraKey.isReduceTransparencyEnabled.rawValue: UIAccessibility.isReduceTransparencyEnabled.description])
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .reduceMotion,
-                                     object: .app,
-                                     extras: [TelemetryWrapper.EventExtraKey.isReduceMotionEnabled.rawValue: UIAccessibility.isReduceMotionEnabled.description])
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .invertColors,
-                                     object: .app,
-                                     extras: [TelemetryWrapper.EventExtraKey.isInvertColorsEnabled.rawValue: UIAccessibility.isInvertColorsEnabled.description])
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .dynamicTextSize,
-                                     object: .app,
-                                     extras: [
-                                        TelemetryWrapper.EventExtraKey.isAccessibilitySizeEnabled.rawValue: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory.description,
-                                        TelemetryWrapper.EventExtraKey.preferredContentSizeCategory.rawValue: UIApplication.shared.preferredContentSizeCategory.rawValue.description])
-    }
-
-    func trackNotificationPermission() {
-        NotificationManager().getNotificationSettings(sendTelemetry: true) { _ in }
-    }
+    
 }

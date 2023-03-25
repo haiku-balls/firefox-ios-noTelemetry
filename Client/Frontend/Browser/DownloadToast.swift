@@ -187,7 +187,7 @@ class DownloadToast: Toast {
                                       handler: { action in
             self.completionHandler?(true)
             self.dismiss(true)
-            TelemetryWrapper.recordEvent(category: .action, method: .cancel, object: .download)
+
         }), accessibilityIdentifier: AccessibilityIdentifiers.Alert.cancelDownloadCancel)
 
         viewController?.present(alert, animated: true, completion: nil)

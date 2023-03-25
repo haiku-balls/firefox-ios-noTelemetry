@@ -48,10 +48,7 @@ extension BrowserViewController {
     }
 
     @objc func reloadTabKeyCommand() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .press,
-                                     object: .keyCommand,
-                                     extras: ["action": "reload"])
+
 
         if let tab = tabManager.selectedTab, homepageViewController?.view.alpha == 0 {
             tab.reload()
@@ -59,10 +56,7 @@ extension BrowserViewController {
     }
 
     @objc func reloadTabIgnoringCacheKeyCommand() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .press,
-                                     object: .keyCommand,
-                                     extras: ["action": "reload-no-cache"])
+
 
         if let tab = tabManager.selectedTab, homepageViewController?.view.alpha == 0 {
             tab.reload(bypassCache: true)
@@ -70,10 +64,7 @@ extension BrowserViewController {
     }
 
     @objc func goBackKeyCommand() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .press,
-                                     object: .keyCommand,
-                                     extras: ["action": "go-back"])
+
 
         if let tab = tabManager.selectedTab, tab.canGoBack, homepageViewController?.view.alpha == 0 {
             tab.goBack()
@@ -81,10 +72,7 @@ extension BrowserViewController {
     }
 
     @objc func goForwardKeyCommand() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .press,
-                                     object: .keyCommand,
-                                     extras: ["action": "go-forward"])
+
 
         if let tab = tabManager.selectedTab, tab.canGoForward {
             tab.goForward()
@@ -92,10 +80,7 @@ extension BrowserViewController {
     }
 
     @objc func findInPageKeyCommand() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .press,
-                                     object: .keyCommand,
-                                     extras: ["action": "find-in-page"])
+
         findInPage(withText: "")
     }
 
@@ -110,19 +95,13 @@ extension BrowserViewController {
     }
 
     @objc func selectLocationBarKeyCommand() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .press,
-                                     object: .keyCommand,
-                                     extras: ["action": "select-location-bar"])
+
         scrollController.showToolbars(animated: true)
         urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
     }
 
     @objc func newTabKeyCommand() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .press,
-                                     object: .keyCommand,
-                                     extras: ["action": "new-tab"])
+
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
         keyboardPressesHandler().reset()
@@ -131,28 +110,19 @@ extension BrowserViewController {
     @objc func newPrivateTabKeyCommand() {
         // NOTE: We cannot and should not distinguish between "new-tab" and "new-private-tab"
         // when recording telemetry for key commands.
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .press,
-                                     object: .keyCommand,
-                                     extras: ["action": "new-tab"])
+
         openBlankNewTab(focusLocationField: true, isPrivate: true)
         keyboardPressesHandler().reset()
     }
 
     @objc func newNormalTabKeyCommand() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .press,
-                                     object: .keyCommand,
-                                     extras: ["action": "new-tab"])
+
         openBlankNewTab(focusLocationField: true, isPrivate: false)
         keyboardPressesHandler().reset()
     }
 
     @objc func closeTabKeyCommand() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .press,
-                                     object: .keyCommand,
-                                     extras: ["action": "close-tab"])
+
         guard let currentTab = tabManager.selectedTab else { return }
         tabManager.removeTab(currentTab)
         keyboardPressesHandler().reset()
@@ -169,10 +139,7 @@ extension BrowserViewController {
     }
 
     @objc func showTabTrayKeyCommand() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .press,
-                                     object: .keyCommand,
-                                     extras: ["action": "show-tab-tray"])
+
         showTabTray()
     }
 
@@ -185,10 +152,7 @@ extension BrowserViewController {
     // MARK: - Tab selection
 
     @objc func nextTabKeyCommand() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .press,
-                                     object: .keyCommand,
-                                     extras: ["action": "next-tab"])
+
         guard let currentTab = tabManager.selectedTab else { return }
 
         let tabs = currentTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
@@ -202,10 +166,7 @@ extension BrowserViewController {
     }
 
     @objc func previousTabKeyCommand() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .press,
-                                     object: .keyCommand,
-                                     extras: ["action": "previous-tab"])
+
         guard let currentTab = tabManager.selectedTab else { return }
 
         let tabs = currentTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs

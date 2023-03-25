@@ -383,13 +383,13 @@ class ReadingListPanel: UITableViewController,
             // Reading list items are closest in concept to bookmarks.
             let visitType = VisitType.bookmark
             libraryPanelDelegate?.libraryPanel(didSelectURL: encodedURL, visitType: visitType)
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .readingListItem)
+
         }
     }
 
     fileprivate func deleteItem(atIndex indexPath: IndexPath) {
         if let record = records?[indexPath.row] {
-            TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .readingListItem, value: .readingListPanel)
+
             profile.readingList.deleteRecord(record, completion: { success in
                 guard success else { return }
                 self.records?.remove(at: indexPath.row)
@@ -407,7 +407,7 @@ class ReadingListPanel: UITableViewController,
 
     fileprivate func toggleItem(atIndex indexPath: IndexPath) {
         if let record = records?[indexPath.row] {
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readingListItem, value: !record.unread ? .markAsUnread : .markAsRead, extras: [ "from": "reading-list-panel" ])
+
             if let updatedRecord = profile.readingList.updateRecord(record, unread: !record.unread).value.successValue {
                 records?[indexPath.row] = updatedRecord
                 tableView.reloadRows(at: [indexPath], with: .automatic)
@@ -455,7 +455,7 @@ extension ReadingListPanel: UITableViewDragDelegate {
               let itemProvider = NSItemProvider(contentsOf: url)
         else { return [] }
 
-        TelemetryWrapper.recordEvent(category: .action, method: .drag, object: .url, value: .readingListPanel)
+
 
         let dragItem = UIDragItem(itemProvider: itemProvider)
         dragItem.localObject = site

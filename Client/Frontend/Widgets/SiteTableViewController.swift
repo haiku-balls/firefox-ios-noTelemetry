@@ -172,7 +172,7 @@ extension SiteTableViewController: UITableViewDragDelegate {
 
         // Telemetry is being sent to legacy, need to add it to metrics.yml
         // Value should be something else than .homePanel
-        TelemetryWrapper.recordEvent(category: .action, method: .drag, object: .url, value: .homePanel)
+
 
         let dragItem = UIDragItem(itemProvider: itemProvider)
         dragItem.localObject = site

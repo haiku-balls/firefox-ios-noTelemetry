@@ -33,12 +33,6 @@ class NotificationManager: NotificationManagerProtocol {
 
             guard !AppConstants.isRunningUnitTest else { return }
 
-            let extras = [TelemetryWrapper.EventExtraKey.notificationPermissionIsGranted.rawValue:
-                            granted]
-            TelemetryWrapper.recordEvent(category: .prompt,
-                                         method: .tap,
-                                         object: .notificationPermission,
-                                         extras: extras)
         }
     }
 
@@ -68,7 +62,7 @@ class NotificationManager: NotificationManagerProtocol {
             completion(settings)
 
             guard sendTelemetry else { return }
-            self.sendTelemetry(settings: settings)
+           
         }
     }
 
@@ -166,33 +160,5 @@ class NotificationManager: NotificationManagerProtocol {
         center.add(request, withCompletionHandler: nil)
     }
 
-    private func sendTelemetry(settings: UNNotificationSettings) {
-        guard !AppConstants.isRunningUnitTest else { return }
 
-        var authorizationStatus = ""
-        switch settings.authorizationStatus {
-        case .authorized: authorizationStatus = "authorized"
-        case .denied: authorizationStatus = "denied"
-        case .ephemeral: authorizationStatus = "ephemeral"
-        case .provisional: authorizationStatus = "provisional"
-        case .notDetermined: authorizationStatus = "notDetermined"
-        @unknown default: authorizationStatus = "notDetermined"
-        }
-
-        var alertSetting = ""
-        switch settings.alertSetting {
-        case .enabled: alertSetting = "enabled"
-        case .disabled: alertSetting = "disabled"
-        case .notSupported: alertSetting = "notSupported"
-        @unknown default: alertSetting = "notSupported"
-        }
-
-        let extras = [TelemetryWrapper.EventExtraKey.notificationPermissionStatus.rawValue: authorizationStatus,
-                      TelemetryWrapper.EventExtraKey.notificationPermissionAlertSetting.rawValue: alertSetting]
-
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .view,
-                                     object: .notificationPermission,
-                                     extras: extras)
-    }
 }
