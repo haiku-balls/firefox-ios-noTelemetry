@@ -31,7 +31,7 @@ Building the code
     ```
 1. Clone the repository:
     ```shell
-    git clone https://github.com/mozilla-mobile/firefox-ios
+    git clone https://github.com/haiku-balls/firefox-ios-noTelemetry/
     ```
 1. Install Node.js dependencies, build user scripts and update content blocker:
     ```shell
